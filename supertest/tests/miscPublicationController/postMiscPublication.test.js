@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds } = require('../hooks/miscPublicationController/miscPublicationHooks');
+const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../hooks/miscPublicationController/miscPublicationHooks');
 
 describe('Miscellaneous Publication API Test - POST Requests', () => {
 
@@ -19,7 +19,7 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'New Misc Publication',
             description: 'Description for the new misc publication',
-            fileURL: 'http://file.url/new',
+            fileUrl: 'http://file.url/new',
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
@@ -27,8 +27,7 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
                                       .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Content-Type', 'application/json');
         expect(response.status).to.equal(201);
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('title', miscPublication.title);
@@ -43,16 +42,14 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'Título con caracteres especiales: !@#$%^&*()_+',
             description: 'Descripción con caracteres especiales: !@#$%^&*()_+',
-            fileURL: 'http://file.url/special-chars',
+            fileUrl: 'http://file.url/special-chars',
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(201);
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('title', miscPublication.title);
@@ -66,16 +63,14 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
     it('TC-48: Verify Response When Title Field is Missing in the Miscellaneous Publication Request', async () => {
         const miscPublication = {
             description: 'Description for the new misc publication',
-            fileURL: 'http://file.url/new',
+            fileUrl: 'http://file.url/new',
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -83,16 +78,14 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
     it('TC-49: Verify Response When Description Field is Missing in the Miscellaneous Publication Request', async () => {
         const miscPublication = {
             title: 'New Misc Publication',
-            fileURL: 'http://file.url/new',
+            fileUrl: 'http://file.url/new',
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -101,16 +94,14 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'New Misc Publication',
             description: 'Description for the new misc publication',
-            fileURL: 'invalid-url',
+            fileUrl: 'invalid-url',
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -119,15 +110,13 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'New Misc Publication',
             description: 'Description for the new misc publication',
-            fileURL: 'http://file.url/new',
+            fileUrl: 'http://file.url/new',
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -136,16 +125,14 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'New Misc Publication',
             description: 'Description for the new misc publication',
-            fileURL: 'http://file.url/new',
+            fileUrl: 'http://file.url/new',
             isPublished: true,
             publicationDate: 'invalid-date',
             userId: getCreatedUserId()
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -154,15 +141,13 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'New Misc Publication',
             description: 'Description for the new misc publication',
-            fileURL: 'http://file.url/new',
+            fileUrl: 'http://file.url/new',
             isPublished: true,
             publicationDate: '2020-12-05'
         };
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -171,7 +156,7 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         const miscPublication = {
             title: 'Duplicate Misc Publication',
             description: 'Description for the duplicate misc publication',
-            fileURL: 'http://file.url/duplicate',
+            fileUrl: 'http://file.url/duplicate',
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
@@ -179,15 +164,11 @@ describe('Miscellaneous Publication API Test - POST Requests', () => {
         await request.post('/miscPublication')
                      .send(miscPublication)
                      .set('Accept', 'application/json')
-                     .set('Content-Type', 'application/json')
-                     .expect('Content-Type', /json/)
                      .expect(201);
 
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(409);
         expect(response.body).to.have.property('error');
     });

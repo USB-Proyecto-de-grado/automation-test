@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
 
-const { createTestUser, deleteTestUser, getCreatedUserId } = require('./userHooks');
+const { createTestUser, deleteTestUser, getCreatedUserId } = require('../hooks/user/userHooks');
 
 describe('User API Test - POST Requests', () => {
     let createdUserIds = [];
@@ -20,7 +20,7 @@ describe('User API Test - POST Requests', () => {
             }
         }
         createdUserIds = [];
-        await deleteTestUser();
+        await deleteTestUser(); // Elimina el usuario de prueba creado por los hooks
     });
 
     it('TC-14: Verify the user is correctly created', async () => {

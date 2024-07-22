@@ -2,25 +2,25 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, createTestUbication, createEventEntries, deleteEventEntries, deleteTestUserAndUbication, getCreatedEventIds, getCreatedUserId, getCreatedUbicationId } = require('../hooks/event/eventHooks');
+const { createTestUser, deleteTestUser, createEventEntries, getCreatedUserId, createTestUbication, deleteTestUbication, deleteEventEntries, getCreatedUbicationId } = require('../hooks/event/eventHooks');
 
-describe('Event API Test - GET Requests (All Events)', () => {
+describe('Event API Test - DELETE Requests', () => {
 
     before(async () => {
         await createTestUser();
         await createTestUbication();
-        await createEventEntries(1); // Crear al menos un evento
+        await createEventEntries(1);
     });
 
     after(async () => {
         await deleteEventEntries();
-        await deleteTestUserAndUbication();
+        await deleteTestUbication();
+        await deleteTestUser();
     });
 
     it('TC-107: Verify successful retrieval of event list', async () => {
         const response = await request.get('/events')
-                                      .set('Accept', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
 
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an('array');

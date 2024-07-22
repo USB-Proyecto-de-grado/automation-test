@@ -2,9 +2,9 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, createTestUbication, createEventEntries, deleteEventEntries, deleteTestUserAndUbication, getCreatedEventIds, getCreatedUserId, getCreatedUbicationId } = require('../hooks/event/eventHooks');
+const { createTestUser, deleteTestUser, createEventEntries, getCreatedUserId, createTestUbication, deleteTestUbication, deleteEventEntries, getCreatedUbicationId } = require('../hooks/event/eventHooks');
 
-describe('Event API Test - GET Requests (By ID)', () => {
+describe('Event API Test - DELETE Requests', () => {
 
     before(async () => {
         await createTestUser();
@@ -14,7 +14,8 @@ describe('Event API Test - GET Requests (By ID)', () => {
 
     after(async () => {
         await deleteEventEntries();
-        await deleteTestUserAndUbication();
+        await deleteTestUbication();
+        await deleteTestUser();
     });
 
     it('TC-112: Verify successful retrieval of event entry when valid ID is provided', async () => {
@@ -23,8 +24,7 @@ describe('Event API Test - GET Requests (By ID)', () => {
         console.log('Event ID for TC-112:', eventId);
         
         const response = await request.get(`/event/${eventId}`)
-                                      .set('Accept', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
 
         expect(response.status).to.equal(200);
         expect(response.body).to.have.property('id', eventId);

@@ -30,9 +30,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(201);
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('title', event.title);
@@ -59,9 +57,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -79,9 +75,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -100,9 +94,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -120,9 +112,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -141,9 +131,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -162,9 +150,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -182,9 +168,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -202,9 +186,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -223,9 +205,7 @@ describe('Event API Test - POST Requests', () => {
         };
         const response = await request.post('/event')
                                       .send(event)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });

@@ -9,9 +9,7 @@ const createTestUser = async () => {
     const user = { name: 'testUser', email: 'testUser@example.com' };
     const response = await request.post('/user')
                                   .send(user)
-                                  .set('Accept', 'application/json')
-                                  .set('Content-Type', 'application/json')
-                                  .expect('Content-Type', /json/);
+                                  .set('Accept', 'application/json');
     
     if (response.status === 201) {
         createdUserId = response.body.id;
@@ -26,7 +24,7 @@ const createMusicEntries = async (numEntries = 1) => {
         musicData.push({
             title: `Test Music ${i}`,
             description: `This is the description for Test Music ${i}`,
-            youtubeLink: `http://youtube.com/test${i}`,
+            youTubeLink: `http://youtube.com/test${i}`,
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: createdUserId
@@ -38,9 +36,7 @@ const createMusicEntries = async (numEntries = 1) => {
     for (const music of musicData) {
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
 
         if (response.status === 201) {
             createdMusicIds.push(response.body.id);

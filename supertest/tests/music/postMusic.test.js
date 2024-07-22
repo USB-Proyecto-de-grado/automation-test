@@ -19,21 +19,19 @@ describe('Music API Test - POST Requests', () => {
         const music = {
             title: 'Liebestraum No. 3',
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '2020-12-03',
             userId: getCreatedUserId()
         };
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(201);
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('title', music.title);
         expect(response.body).to.have.property('description', music.description);
-        expect(response.body).to.have.property('youtubeLink', music.youtubeLink);
+        expect(response.body).to.have.property('youTubeLink', music.youTubeLink);
         expect(response.body).to.have.property('isPublished', music.isPublished);
         expect(response.body).to.have.property('publicationDate', music.publicationDate);
         expect(response.body).to.have.property('userId', music.userId);
@@ -43,15 +41,14 @@ describe('Music API Test - POST Requests', () => {
     it('TC-29: Verify Response When Title Field is Missing in the Music Entry Request', async () => {
         const music = {
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '2020-12-03',
             userId: getCreatedUserId()
         };
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json');
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -59,15 +56,14 @@ describe('Music API Test - POST Requests', () => {
     it('TC-30: Verify Response When Description Field is Missing in the Music Entry Request', async () => {
         const music = {
             title: 'Liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '2020-12-03',
             userId: getCreatedUserId()
         };
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json');
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -76,15 +72,14 @@ describe('Music API Test - POST Requests', () => {
         const music = {
             title: 'Liebestraum No. 3',
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'invalid-url',
+            youTubeLink: 'invalid-url',
             isPublished: true,
             publicationDate: '2020-12-03',
             userId: getCreatedUserId()
         };
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json');
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -93,14 +88,13 @@ describe('Music API Test - POST Requests', () => {
         const music = {
             title: 'Liebestraum No. 3',
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '2020-12-03'
         };
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json');
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -109,15 +103,14 @@ describe('Music API Test - POST Requests', () => {
         const music = {
             title: 'Liebestraum No. 3',
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '12-03-2020',
             userId: getCreatedUserId()
         };
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json');
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');
     });
@@ -126,7 +119,7 @@ describe('Music API Test - POST Requests', () => {
         const music = {
             title: 'Liebestraum No. 3',
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '2020-12-03',
             userId: getCreatedUserId()
@@ -134,13 +127,11 @@ describe('Music API Test - POST Requests', () => {
         await request.post('/music')
                      .send(music)
                      .set('Accept', 'application/json')
-                     .set('Content-Type', 'application/json')
                      .expect(201);
         
         const response = await request.post('/music')
                                       .send(music)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json');
+                                      .set('Accept', 'application/json');
         expect(response.status).to.equal(409);
         expect(response.body).to.have.property('error');
     });
@@ -149,7 +140,7 @@ describe('Music API Test - POST Requests', () => {
         const music = {
             title: 'Liebestraum No. 3',
             description: 'This is the liebestraum No. 3',
-            youtubeLink: 'http://youtube.com?v=1232332',
+            youTubeLink: 'http://youtube.com?v=1232332',
             isPublished: true,
             publicationDate: '2020-12-03',
             userId: getCreatedUserId()

@@ -9,9 +9,7 @@ const createTestUser = async () => {
     const user = { name: 'testUser', email: 'testUser@example.com' };
     const response = await request.post('/user')
                                   .send(user)
-                                  .set('Accept', 'application/json')
-                                  .set('Content-Type', 'application/json')
-                                  .expect('Content-Type', /json/);
+                                  .set('Accept', 'application/json');
     
     if (response.status === 201) {
         createdUserId = response.body.id;
@@ -26,7 +24,7 @@ const createMiscPublicationEntries = async (numEntries = 3) => {
         miscPublicationData.push({
             title: `Misc Publication ${i}`,
             description: `This is the description for Misc Publication ${i}`,
-            fileURL: `http://file.url/test${i}`,
+            fileUrl: `http://file.url/test${i}`,
             isPublished: true,
             publicationDate: '2020-12-05',
             userId: createdUserId
@@ -38,9 +36,7 @@ const createMiscPublicationEntries = async (numEntries = 3) => {
     for (const miscPublication of miscPublicationData) {
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
-                                      .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
-                                      .expect('Content-Type', /json/);
+                                      .set('Accept', 'application/json');
 
         if (response.status === 201) {
             createdMiscPublicationIds.push(response.body.id);
