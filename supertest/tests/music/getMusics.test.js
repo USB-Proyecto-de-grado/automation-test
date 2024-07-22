@@ -53,7 +53,7 @@ describe('Music API Test - GET Requests', () => {
 
 
     it('TC-41: Verify System Response When Invalid Music ID Format is Submitted for get /music/{id} endpoint', async () => {
-        const response = await request.get('/music/invalid-id')
+        const response = await request.get('/music/a')
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);
         expect(response.status).to.equal(400);

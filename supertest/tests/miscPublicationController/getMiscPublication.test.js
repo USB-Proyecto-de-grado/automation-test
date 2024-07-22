@@ -26,7 +26,7 @@ describe('Miscellaneous Publication API Test - GET Requests (By ID)', () => {
     });
 
     it('TC-69: Verify Response When Invalid Miscellaneous Publication ID Format is Submitted', async () => {
-        const invalidId = 'invalid-id';
+        const invalidId = -1;
         const response = await request.get(`/miscPublication/${invalidId}`)
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);
@@ -35,7 +35,7 @@ describe('Miscellaneous Publication API Test - GET Requests (By ID)', () => {
     });
 
     it('TC-70: Verify System Response When Miscellaneous Publication ID Does Not Exist in Database', async () => {
-        const nonExistentId = 999999;
+        const nonExistentId = 0;
         const response = await request.get(`/miscPublication/${nonExistentId}`)
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);

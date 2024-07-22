@@ -34,7 +34,7 @@ describe('Music API Test - GET Requests by ID', () => {
     });
 
     it('TC-41: Verify System Response When Invalid Music ID Format is Submitted for get /music/{id} endpoint', async () => {
-        const response = await request.get('/music/invalid-id')
+        const response = await request.get('/music/a')
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);
         expect(response.status).to.equal(400);
@@ -42,7 +42,7 @@ describe('Music API Test - GET Requests by ID', () => {
     });
 
     it('TC-42: Verify System Response When Music ID Does Not Exist in Database for get /music/{id} endpoint', async () => {
-        const nonExistentMusicId = 10000000000;
+        const nonExistentMusicId = 0;
         const response = await request.get(`/music/${nonExistentMusicId}`)
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);

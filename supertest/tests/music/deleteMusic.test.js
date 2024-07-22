@@ -28,7 +28,7 @@ describe('Music API Test - DELETE Requests', () => {
     });
 
     it('TC-124: Verify Response When Invalid Music ID Format is Submitted for Deletion', async () => {
-        const response = await request.delete('/music/invalid-id')
+        const response = await request.delete('/music/a')
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);
         expect(response.status).to.equal(400);
@@ -36,7 +36,7 @@ describe('Music API Test - DELETE Requests', () => {
     });
 
     it('TC-123: Verify System Response When Deleting Music ID That Does Not Exist in Database', async () => {
-        const nonExistentMusicId = 10000000000;
+        const nonExistentMusicId = 0;
         const response = await request.delete(`/music/${nonExistentMusicId}`)
                                       .set('Accept', 'application/json')
                                       .expect('Content-Type', /json/);

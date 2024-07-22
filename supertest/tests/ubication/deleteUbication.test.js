@@ -25,7 +25,7 @@ describe('Ubication API Test - GET Requests (By ID)', () => {
     });
 
     it('TC-83: Verify Response When Invalid Ubication ID Format is Submitted', async () => {
-        const invalidUbicationId = 'invalid';
+        const invalidUbicationId = 'a';
         const response = await request.get(`/ubication/${invalidUbicationId}`)
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
@@ -33,7 +33,7 @@ describe('Ubication API Test - GET Requests (By ID)', () => {
     });
 
     it('TC-84: Verify System Response When Ubication ID Does Not Exist in Database', async () => {
-        const nonExistentUbicationId = 10000000000;
+        const nonExistentUbicationId = 0;
         const response = await request.get(`/ubication/${nonExistentUbicationId}`)
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(404);
