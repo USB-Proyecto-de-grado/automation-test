@@ -3,7 +3,25 @@ const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
 
+const { createTestUser, deleteTestUser, getCreatedUserId } = require('./userHooks');
+
 describe('User API Test - POST Requests', () => {
+    let createdUserIds = [];
+
+    afterEach(async () => {
+        for (const userId of createdUserIds) {
+            try {
+                await request.delete(`/user/${userId}`)
+                              .set('Accept', 'application/json')
+                              .expect(200);
+                console.log('User deleted with ID:', userId);
+            } catch (error) {
+                console.error('Error deleting user with ID:', userId, error);
+            }
+        }
+        createdUserIds = [];
+        await deleteTestUser();
+    });
 
     it('TC-14: Verify the user is correctly created', async () => {
         const userData = {
@@ -20,6 +38,8 @@ describe('User API Test - POST Requests', () => {
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('name', userData.name);
         expect(response.body).to.have.property('email', userData.email);
+
+        createdUserIds.push(response.body.id);
     });
 
     it('TC-15: Verify the user is correctly created when the name has special characters', async () => {
@@ -37,6 +57,8 @@ describe('User API Test - POST Requests', () => {
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('name', userData.name);
         expect(response.body).to.have.property('email', userData.email);
+
+        createdUserIds.push(response.body.id);
     });
 
     it('TC-16: Should not create a user when the email is missing', async () => {
