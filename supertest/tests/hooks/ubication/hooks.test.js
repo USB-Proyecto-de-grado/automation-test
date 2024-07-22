@@ -3,9 +3,7 @@ const expect = require('chai').expect;
 
 describe('Hooks Test - Ubication Creation and Deletion', () => {
     before(async () => {
-        try {
-            await createUbications(5);
-        }
+        await createUbications(5);
     });
 
     after(async () => {
