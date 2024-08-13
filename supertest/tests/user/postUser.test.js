@@ -20,7 +20,7 @@ describe('User API Test - POST Requests', () => {
             }
         }
         createdUserIds = [];
-        await deleteTestUser(); // Elimina el usuario de prueba creado por los hooks
+        await deleteTestUser();
     });
 
     it('TC-14: Verify the user is correctly created', async () => {

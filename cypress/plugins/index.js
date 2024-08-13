@@ -16,7 +16,9 @@
  * @type {Cypress.PluginConfig}
  */
 // eslint-disable-next-line no-unused-vars
+// cypress/plugins/index.js
+
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-}
+  // Aquí no necesitas llamar a initPlugin, simplemente retorna la configuración.
+  return config;
+};
