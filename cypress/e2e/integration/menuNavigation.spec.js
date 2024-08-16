@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 const config = require('../../../config');
 const formNavigationMenuPage = require('../../../page-objects/menu/menuPage');
-const publishPublicationFormPage = require('../../../../page-objects/publishPages/publishPublicationFormPage');
 
 describe('Form Navigation Menu', () => {
 

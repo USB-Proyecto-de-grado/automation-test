@@ -44,4 +44,24 @@ describe('Publish Music Form', () => {
 
     publishMusicFormPage.verifyYouTubePlayerVisible();
   });
+
+  it('should handle an invalid YouTube link and show an error', () => {
+    publishMusicFormPage.fillMusicForm({
+      youTubeLink: 'https://www.youtube.com/watch?v=iwWgXcQ',
+      title: 'Broken Link Test',
+      description: 'This should not work.'
+    });
+  
+    publishMusicFormPage.submitForm();
+  
+    // Espera para asegurar que el mensaje de error tenga tiempo de aparecer
+    cy.wait(10000); // Espera 10 segundos antes de verificar el mensaje
+
+  
+    // Verifica que el mensaje de error del video no disponible se muestra en el lugar del reproductor
+    cy.get('#youTubePlayer').should('contain.text', 'Este video no está disponible');
+  
+    alertSnackBarPage.verifySnackbarMessage('Parámetros no válidos en la aplicación');
+  });
+  
 });

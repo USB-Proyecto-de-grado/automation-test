@@ -19,10 +19,13 @@ describe('Music View Container', () => {
     publishMusicFormPage.submitForm();
 
     cy.visit(config.uiUrl + '/view_music');
+
+    cy.wait(5000); 
+
     const music = {
       title: 'Never Gonna Give You Up',
       description: 'Classic hit by Rick Astley.',
-      publicationDate: '2020-12-03',
+      publicationDate: '2020-12-02',
       youTubeLink: 'dQw4w9WgXcQ',
     };
 

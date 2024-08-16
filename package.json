@@ -6,7 +6,8 @@
   "scripts": {
     "test:ui": "cypress run",
     "test:api": "mocha 'supertest/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport",
-    "test": "npm run test:ui && npm run test:api"
+    "test": "npm run test:ui && npm run test:api",
+    "cy:open": "cypress open"
   },
   "keywords": [],
   "author": "",
@@ -20,5 +21,8 @@
     "mochawesome-merge": "^4.3.0",
     "mochawesome-report-generator": "^6.2.0",
     "supertest": "^6.3.4"
+  },
+  "dependencies": {
+    "cypress-iframe": "^1.0.1"
   }
 }

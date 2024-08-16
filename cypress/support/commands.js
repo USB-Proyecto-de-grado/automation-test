@@ -1,3 +1,9 @@
+import 'cypress-iframe';
+
+Cypress.Commands.add('verifyIframeLoaded', (iframeSelector) => {
+    cy.get(iframeSelector).should('exist').and('have.attr', 'src').and('include', 'youtube');
+  });
+  
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
