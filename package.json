@@ -6,13 +6,15 @@
   "scripts": {
     "test:ui": "mocha  --experimental-modules 'tests/ui/**/*.spec.js'  --reporter mochawesome --reporter-options reportDir=reports/ui,reportFilename=apiReport",
     "test:api": "mocha 'tests/api/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport",
-    "test": "npm run test:ui && npm run test:api"
+    "test": "npm run test:ui && npm run test:api",
+    "start-gui": "electron app/main.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.4.1",
+    "electron": "^32.1.2",
     "mocha": "^9.2.2",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",

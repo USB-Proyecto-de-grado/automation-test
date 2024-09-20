@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automation Test Runner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Automation Test Runner</h1>
+
+  <div id="controls">
+    <button id="run-ui-tests">Run UI Tests</button>
+    <button id="cancel-ui-tests">Cancel UI Tests</button>
+    <button id="run-api-tests">Run API Tests</button>
+    <button id="cancel-api-tests">Cancel API Tests</button>
+  </div>
+  
+  <div id="reports">
+    <h2>Generated Reports</h2>
+    <h3>UI Reports</h3>
+    <button id="view-ui-report">View UI Report</button>
+    <h3>API Reports</h3>
+    <button id="view-api-report">View API Report</button>
+  </div>
+
+  <!-- iframe para mostrar el reporte -->
+  <div id="report-viewer">
+    <h2>Report Viewer</h2>
+    <iframe id="report-frame" src="" width="100%" height="400px"></iframe>
+  </div>
+
+  <div id="output">
+    <h2>Test Output</h2>
+    <pre id="test-output"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
