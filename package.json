@@ -4,18 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:ui": "cypress run",
-    "test:api": "mocha 'supertest/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport",
-    "test": "npm run test:ui && npm run test:api",
-    "cy:open": "cypress open"
+    "test:ui": "mocha  --experimental-modules 'tests/ui/**/*.spec.js'  --reporter mochawesome --reporter-options reportDir=reports/ui,reportFilename=apiReport",
+    "test:api": "mocha 'tests/api/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport",
+    "test": "npm run test:ui && npm run test:api"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.4.1",
-    "cypress": "^13.11.0",
-    "cypress-mochawesome-reporter": "^3.8.2",
     "mocha": "^9.2.2",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",
@@ -23,6 +20,7 @@
     "supertest": "^6.3.4"
   },
   "dependencies": {
-    "cypress-iframe": "^1.0.1"
+    "chromedriver": "^128.0.1",
+    "selenium-webdriver": "^4.24.0"
   }
 }
