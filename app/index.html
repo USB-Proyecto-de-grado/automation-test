@@ -7,32 +7,42 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Automation Test Runner</h1>
+  <div class="container">
+    <header>
+      <h1>Automation Test Runner</h1>
+    </header>
 
-  <div id="controls">
-    <button id="run-ui-tests">Run UI Tests</button>
-    <button id="cancel-ui-tests">Cancel UI Tests</button>
-    <button id="run-api-tests">Run API Tests</button>
-    <button id="cancel-api-tests">Cancel API Tests</button>
-  </div>
-  
-  <div id="reports">
-    <h2>Generated Reports</h2>
-    <h3>UI Reports</h3>
-    <button id="view-ui-report">View UI Report</button>
-    <h3>API Reports</h3>
-    <button id="view-api-report">View API Report</button>
-  </div>
+    <section id="controls">
+      <h2>Control Panel</h2>
+      <div class="button-group">
+        <button id="run-ui-tests" class="btn-primary">Run UI Tests</button>
+        <button id="cancel-ui-tests" class="btn-secondary">Cancel UI Tests</button>
+        <button id="run-api-tests" class="btn-primary">Run API Tests</button>
+        <button id="cancel-api-tests" class="btn-secondary">Cancel API Tests</button>
+      </div>
+    </section>
 
-  <!-- iframe para mostrar el reporte -->
-  <div id="report-viewer">
-    <h2>Report Viewer</h2>
-    <iframe id="report-frame" src="" width="100%" height="400px"></iframe>
-  </div>
+    <section id="reports">
+      <h2>Generated Reports</h2>
+      <div class="report-section">
+        <h3>UI Reports</h3>
+        <button id="view-ui-report" class="btn-report">View UI Report</button>
+      </div>
+      <div class="report-section">
+        <h3>API Reports</h3>
+        <button id="view-api-report" class="btn-report">View API Report</button>
+      </div>
+    </section>
 
-  <div id="output">
-    <h2>Test Output</h2>
-    <pre id="test-output"></pre>
+    <section id="report-viewer">
+      <h2>Report Viewer</h2>
+      <iframe id="report-frame" src="" width="100%" height="400px"></iframe>
+    </section>
+
+    <section id="output">
+      <h2>Test Output</h2>
+      <pre id="test-output"></pre>
+    </section>
   </div>
 
   <script src="script.js"></script>

@@ -92,14 +92,14 @@ ipcMain.on('run-api-tests', (event) => {
 
 // Cargar el reporte más reciente de UI
 ipcMain.on('view-ui-report', (event) => {
-  const uiReportPath = getLatestReport(path.join(__dirname, '../reports/ui'));
+  const uiReportPath = getLatestReport(path.join(__dirname, '../../reports/ui'));
   console.log("Mostrando reporte UI:", uiReportPath);
   event.sender.send('load-report', uiReportPath ? `file://${uiReportPath}` : null);
 });
 
 // Cargar el reporte más reciente de API
 ipcMain.on('view-api-report', (event) => {
-  const apiReportPath = getLatestReport(path.join(__dirname, '../reports/api'));
+  const apiReportPath = getLatestReport(path.join(__dirname, '../../reports/api'));
   console.log("Mostrando reporte API:", apiReportPath);
   event.sender.send('load-report', apiReportPath ? `file://${apiReportPath}` : null);
 });

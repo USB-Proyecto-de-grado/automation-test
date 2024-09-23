@@ -7,7 +7,7 @@
     "test:ui": "mocha  --experimental-modules 'tests/ui/**/*.spec.js'  --reporter mochawesome --reporter-options reportDir=reports/ui,reportFilename=apiReport",
     "test:api": "mocha 'tests/api/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport",
     "test": "npm run test:ui && npm run test:api",
-    "start-gui": "electron app/main.js"
+    "start-gui": "electron main/app/main.js"
   },
   "keywords": [],
   "author": "",

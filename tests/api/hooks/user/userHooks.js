@@ -5,7 +5,7 @@ const request = supertest(config.apiUrl);
 let createdUserId;
 
 const createTestUser = async () => {
-    const user = { name: 'testUser', email: 'testUser@example.com' };
+    const user = { name: 'testUser', email: 'testUser@example.com', roleId: 1 };
     const response = await request.post('/user')
                                   .send(user)
                                   .set('Accept', 'application/json')
