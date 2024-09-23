@@ -2,6 +2,8 @@ const buildDriver = require('../../../../main/core/driverSetUp');
 const PreTestSetup = require('../../../../main/setup/preSetUp');
 const PublishPublicationFormPage = require('../../../../page-objects/publishPages/publishPublicationFormPage');
 const AlertSnackBarPage = require('../../../../page-objects/common/alertSnackBarPage');
+const { takeScreenshot } = require('../../../../utils/screenshotUtils');
+const addContext = require('mochawesome/addContext');
 const config = require('../../../../config');
 const assert = require('assert');
 
@@ -23,6 +25,13 @@ describe('Publish Publication Form Tests', function() {
     });
 
     afterEach(async function() {
+        if (this.currentTest.state === 'failed') {
+            const screenshotPath = await takeScreenshot(driver, this.currentTest.title);
+            addContext(this, {
+              title: 'Screenshot',
+              value: screenshotPath
+            });
+          };
         await driver.quit();
     });
 

@@ -31,6 +31,17 @@ app.on('window-all-closed', () => {
   }
 });
 
+async function takeScreenshot(driver, testName) {
+  const screenshotDir = path.join(__dirname, '../reports/ui/screenshots');
+  if (!fs.existsSync(screenshotDir)) {
+    fs.mkdirSync(screenshotDir, { recursive: true });
+  }
+  const screenshotPath = path.join(screenshotDir, `${testName}.png`);
+  const image = await driver.takeScreenshot();
+  fs.writeFileSync(screenshotPath, image, 'base64');
+  console.log(`Screenshot saved to ${screenshotPath}`);
+}
+
 // Función para obtener el último archivo HTML en un directorio
 function getLatestReport(directory) {
     const files = fs.readdirSync(directory);
