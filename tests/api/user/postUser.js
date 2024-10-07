@@ -5,7 +5,7 @@ const request = supertest(config.apiUrl);
 
 const { createTestUser, deleteTestUser, getCreatedUserId } = require('../hooks/user/userHooks');
 
-describe('User API Test - POST Requests', () => {
+describe('User API Test - POST Requests [Tag: API Testing]', () => {
     let createdUserIds = [];
 
     afterEach(async () => {

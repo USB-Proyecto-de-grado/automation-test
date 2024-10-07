@@ -7,7 +7,7 @@ const addContext = require('mochawesome/addContext');
 const config = require('../../../../config');
 const assert = require('assert');
 
-describe('Publish Publication Form Tests', function() {
+describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Testing]', function() {
     this.timeout(50000);
     let driver;
     let preTestSetup;
@@ -35,7 +35,7 @@ describe('Publish Publication Form Tests', function() {
         await driver.quit();
     });
 
-    it('should fill the form and submit successfully', async function() {
+    it('should fill the form and submit successfull [Tag: Positive][Tag: Submission]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: 'Publicación de prueba',
@@ -48,7 +48,7 @@ describe('Publish Publication Form Tests', function() {
         assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
     });
 
-    it('should show an error when submitting with invalid data', async function() {
+    it('should show an error when submitting with invalid data [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: ' ',
@@ -61,7 +61,7 @@ describe('Publish Publication Form Tests', function() {
         assert.strictEqual(isMessageDisplayed, true, 'El mensaje de error no fue mostrado correctamente');
     });
 
-    it('should show an error when submitting with the tile with empty space', async function() {
+    it('should show an error when submitting with the tile with empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: ' ',
@@ -75,7 +75,7 @@ describe('Publish Publication Form Tests', function() {
     });
 
     
-    it('should show an error when submitting with the description with empty space', async function() {
+    it('should show an error when submitting with the description with empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: 'Publicación de prueba',

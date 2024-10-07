@@ -46,7 +46,7 @@ describe('Miscellaneous Publication API Test - GET Requests (By ID)', () => {
         expect(response.body).to.have.property('userId');
     });
 
-    it('TC-72: Verify Response When ID Parameter is Missing in the Request', async () => {
+    it('TC-72: Verify Response When ID Parameter is Missing in the Request [Tag: API Testing]', async () => {
         const response = await request.get('/miscPublication/')
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(400);

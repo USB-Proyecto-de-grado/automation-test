@@ -4,7 +4,7 @@ const config = require('../../../config');
 const request = supertest(config.apiUrl);
 const { createTestUser, deleteTestUser, getCreatedUserId } = require('../hooks/user/userHooks');
 
-describe('User API Test - DELETE Requests', () => {
+describe('User API Test - DELETE Requests [Tag: API Testing]', () => {
 
     beforeEach(async () => {
         await createTestUser();

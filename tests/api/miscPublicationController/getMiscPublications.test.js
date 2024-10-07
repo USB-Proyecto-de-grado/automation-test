@@ -4,7 +4,7 @@ const config = require('../../../config');
 const request = supertest(config.apiUrl);
 const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../hooks/miscPublicationController/miscPublicationHooks');
 
-describe('Miscellaneous Publication API Test - GET Requests (List Retrieve)', () => {
+describe('Miscellaneous Publication API Test - GET Requests (List Retrieve) [Tag: API Testing]', () => {
 
     before(async () => {
         await createTestUser();

@@ -8,7 +8,7 @@ const addContext = require('mochawesome/addContext');
 const config = require('../../../../config');
 const assert = require('assert');
 
-describe('Publish Event Form Tests', function () {
+describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]', function () {
   this.timeout(50000);
   let driver;
   let preTestSetup;
@@ -42,7 +42,7 @@ describe('Publish Event Form Tests', function () {
     await driver.quit();
   });
 
-  it('should fill the form and submit successfully', async function () {
+  it('should fill the form and submit successfully [Tag: Positive]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -58,7 +58,7 @@ describe('Publish Event Form Tests', function () {
     assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
   });
 
-  it('submit successfully when the ubication dont exist in the database', async function () {
+  it('submit successfully when the ubication dont exist in the database [Tag: Edge Case]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -74,7 +74,7 @@ describe('Publish Event Form Tests', function () {
     assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
   });
 
-  it('should show validation errors when the price is negative', async function () {
+  it('should show validation errors when the price is negative [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -90,7 +90,7 @@ describe('Publish Event Form Tests', function () {
         assert.strictEqual(isMessageDisplayed, true);
   });
 
-  it('should show validation errors when the title is with an empty space', async function () {
+  it('should show validation errors when the title is with an empty space [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: ' ',
@@ -102,11 +102,11 @@ describe('Publish Event Form Tests', function () {
 
     await publishEventFormPage.submitForm();
 
-    const isMessageDisplayed = await alertSnackBarPage.verifyMessage('Parámetros no válidos en la aplicación');
+    const isMessageDisplayed = await alertSnackBarPage.verifyMessage('Parámetros no válidos en la aplicación [Tag: Negative][Tag: Validation]');
         assert.strictEqual(isMessageDisplayed, true);
   });
 
-  it('should show validation errors when the description is with an empty space', async function () {
+  it('should show validation errors when the description is with an empty space  [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -122,7 +122,7 @@ describe('Publish Event Form Tests', function () {
     assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
   });
 
-  it('should show validation errors when the description is with an empty space', async function () {
+  it('should show validation errors when the description is with an empty space  [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',

@@ -4,7 +4,7 @@ const config = require('../../../config');
 const request = supertest(config.apiUrl);
 const { createTestUser, deleteTestUser, createEventEntries, getCreatedUserId, createTestUbication, deleteTestUbication, deleteEventEntries, getCreatedUbicationId } = require('../hooks/event/eventHooks');
 
-describe('Event API Test - DELETE Requests', () => {
+describe('Event API Test - DELETE Requests  [Tag: API Testing]', () => {
 
     before(async () => {
         await createTestUser();

@@ -4,7 +4,7 @@ const config = require('../../../config');
 const request = supertest(config.apiUrl);
 const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../hooks/ubication/ubicationHooks');
 
-describe('Ubication API Test - GET Requests (Retrieve List)', () => {
+describe('Ubication API Test - GET Requests (Retrieve List) [Tag: API Testing]', () => {
 
     before(async () => {
         await createUbications(5);

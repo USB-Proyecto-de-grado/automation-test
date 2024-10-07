@@ -4,7 +4,7 @@ const config = require('../../../config');
 const request = supertest(config.apiUrl);
 const { createTestUser, deleteTestUser, getCreatedUserId, createMusicEntries, deleteMusicEntries, getCreatedMusicIds } = require('../hooks/music/musicHooks');
 
-describe('Music API Test - GET Requests by ID', () => {
+describe('Music API Test - GET Requests by ID [Tag: API Testing]', () => {
 
     before(async () => {
         await createTestUser();

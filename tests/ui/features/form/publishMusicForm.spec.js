@@ -7,7 +7,7 @@ const addContext = require('mochawesome/addContext');
 const config = require('../../../../config');
 const assert = require('assert');
 
-describe('Feature Tests', function() {
+describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]', function() {
     this.timeout(50000);
     let driver;
     let preTestSetup;
@@ -39,7 +39,24 @@ describe('Feature Tests', function() {
         await driver.quit();
     });
 
-    it('should fill the form and submit successfully', async function() {
+    it('should detect and handle an invalid YouTube link submission [Tag: Negative][Tag: Validation]', async function() {
+        await driver.sleep(5000);
+        // Fill the form with an invalid YouTube link
+        await publishMusicFormPage.fillMusicForm({
+            youTubeLink: 'https://www.youtube.com/watch?v=InvalidVideoID', // Invalid Link
+            title: 'Test Song Title',
+            description: 'Test Description'
+        });
+
+        // Attempt to submit the form
+        await publishMusicFormPage.submitForm();
+
+        // Check for an error message or specific behavior indicating the video is unavailable
+        const isVideoUnavailableMessageDisplayed = await alertSnackBarPage.verifyMessage('Este video no está disponible.');
+        assert.strictEqual(isVideoUnavailableMessageDisplayed, true, 'Expected error message not displayed for unavailable video');
+    });
+
+    it('should fill the form and submit successfully [Tag: Positive][Tag: Submission]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
@@ -53,7 +70,7 @@ describe('Feature Tests', function() {
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when fields the field Link is worng typed', async function() {
+    it('should show validation errors when fields the field Link is worng typed [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'a',
@@ -67,7 +84,7 @@ describe('Feature Tests', function() {
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when the youtubeLink is with an empty space', async function() {
+    it('should show validation errors when the youtubeLink is with an empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: ' ',
@@ -81,7 +98,7 @@ describe('Feature Tests', function() {
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when the title is with an empty space', async function() {
+    it('should show validation errors when the title is with an empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
@@ -95,7 +112,7 @@ describe('Feature Tests', function() {
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when the description is with an empty space', async function() {
+    it('should show validation errors when the description is with an empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
