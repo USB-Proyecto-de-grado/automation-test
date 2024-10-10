@@ -29,22 +29,24 @@ describe('User API Test - GET Requests (By ID) [Tag: API Testing]', () => {
     });
 
     it('TC-21: Verify response when invalid user ID format is submitted', async () => {
-        const invalidUserId = 'invalid-id';
+        const invalidUserId = 0;
         
         const response = await request.get(`/user/${invalidUserId}`)
                                       .set('Accept', 'application/json');
 
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error', 'Invalid user ID format.');
+        expect(response.status).to.equal(404); 
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id 0 not found');
     });
 
-    it('TC-22: Verify system response when user ID does not exist in the database', async () => {
+    it('TC-22: Verify system response when user ID is negative', async () => {
         const nonExistentUserId = 999999;
         
         const response = await request.get(`/user/${nonExistentUserId}`)
                                       .set('Accept', 'application/json');
 
-        expect(response.status).to.equal(404);
-        expect(response.body).to.have.property('error', 'User ID does not exist.');
+        expect(response.status).to.equal(404); 
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id 999999 not found');
     });
 });

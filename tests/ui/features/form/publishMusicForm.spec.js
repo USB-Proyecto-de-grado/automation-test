@@ -20,7 +20,6 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         await preTestSetup.loginToGoogle(config.googleUser, config.googlePassword);
         publishMusicFormPage = new PublishMusicFormPage(driver);
         alertSnackBarPage = new AlertSnackBarPage(driver);
-
         await driver.get(config.uiUrl + '/publish/music');
         await driver.wait(async () => {
             const readyState = await driver.executeScript('return document.readyState');
@@ -36,22 +35,21 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
               value: screenshotPath
             });
           };
-        await driver.quit();
+        if (driver) {
+            await driver.quit();
+        }
     });
 
     it('should detect and handle an invalid YouTube link submission [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000);
-        // Fill the form with an invalid YouTube link
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=InvalidVideoID', // Invalid Link
             title: 'Test Song Title',
             description: 'Test Description'
         });
 
-        // Attempt to submit the form
         await publishMusicFormPage.submitForm();
 
-        // Check for an error message or specific behavior indicating the video is unavailable
         const isVideoUnavailableMessageDisplayed = await alertSnackBarPage.verifyMessage('Este video no está disponible.');
         assert.strictEqual(isVideoUnavailableMessageDisplayed, true, 'Expected error message not displayed for unavailable video');
     });
