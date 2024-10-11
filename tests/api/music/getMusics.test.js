@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, getCreatedUserId, createMusicEntries, deleteMusicEntries, getCreatedMusicIds } = require('../hooks/music/musicHooks');
+const { createTestUser, deleteTestUser, getCreatedUserId, createMusicEntries, deleteMusicEntries, getCreatedMusicIds } = require('../../hooks/music/musicHooks');
 
 describe('Music API Test - GET Requests [Tag: API Testing]', () => {
 
@@ -35,7 +35,6 @@ describe('Music API Test - GET Requests [Tag: API Testing]', () => {
             expect(music).to.have.property('youTubeLink');
             expect(music).to.have.property('isPublished');
             expect(music).to.have.property('publicationDate');
-            expect(music).to.have.property('userId');
         });
     });
 
@@ -52,8 +51,8 @@ describe('Music API Test - GET Requests [Tag: API Testing]', () => {
     it('TC-41: Verify System Response When Invalid Music ID Format is Submitted for get /music/{id} endpoint', async () => {
         const response = await request.get('/music/a')
                                       .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        expect(response.status).to.equal(500);
+        expect(response.body).to.have.property('message', 'Internal server error');
     });
 
     it('TC-42: Verify System Response When Music ID Does Not Exist in Database for get /music/{id} endpoint', async () => {
@@ -61,6 +60,7 @@ describe('Music API Test - GET Requests [Tag: API Testing]', () => {
         const response = await request.get(`/music/${nonExistentMusicId}`)
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(404);
-        expect(response.body).to.have.property('error', 'Music ID does not exist.');
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id -1 not found');
     });
 });

@@ -7,7 +7,7 @@ let createdUbicationId;
 let createdEventIds = [];
 
 const createTestUser = async () => {
-    const user = { name: 'testUser', email: 'testUser@example.com' };
+    const user = { name: 'eventTestUser', email: 'eventTestUser@example.com', roleId: 1  };
     const response = await request.post('/user')
                                   .send(user)
                                   .set('Accept', 'application/json');
@@ -87,4 +87,8 @@ const deleteEventEntries = async () => {
     createdEventIds = [];
 };
 
-module.exports = { createTestUser, createTestUbication, createEventEntries, deleteTestUser, deleteTestUbication, deleteEventEntries, getCreatedUserId: () => createdUserId, getCreatedUbicationId: () => createdUbicationId, getCreatedEventIds: () => createdEventIds };
+const addCreatedEventId = (eventId) => {
+    createdEventIds.push(eventId);
+};
+
+module.exports = { createTestUser, createTestUbication, createEventEntries, deleteTestUser, deleteTestUbication, deleteEventEntries, getCreatedUserId: () => createdUserId, getCreatedUbicationId: () => createdUbicationId, getCreatedEventIds: () => createdEventIds, addCreatedEventId  };

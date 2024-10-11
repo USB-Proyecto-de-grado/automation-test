@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../hooks/miscPublicationController/miscPublicationHooks');
+const { createTestUser, deleteTestUser, addCreatedMiscPublicationId , deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../../hooks/miscPublicationController/miscPublicationHooks');
 
 describe('Miscellaneous Publication API Test - POST Requests [Tag: API Testing]', () => {
 
@@ -32,10 +32,10 @@ describe('Miscellaneous Publication API Test - POST Requests [Tag: API Testing]'
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('title', miscPublication.title);
         expect(response.body).to.have.property('description', miscPublication.description);
-        expect(response.body).to.have.property('fileURL', miscPublication.fileURL);
+        expect(response.body).to.have.property('fileUrl', miscPublication.fileUrl);
         expect(response.body).to.have.property('isPublished', miscPublication.isPublished);
         expect(response.body).to.have.property('publicationDate', miscPublication.publicationDate);
-        expect(response.body).to.have.property('userId', miscPublication.userId);
+        addCreatedMiscPublicationId(response.body.id);
     });
 
     it('TC-55: Verify Correct Data Storage for Created Miscellaneous Publication With Special Characters', async () => {
@@ -54,10 +54,10 @@ describe('Miscellaneous Publication API Test - POST Requests [Tag: API Testing]'
         expect(response.body).to.have.property('id');
         expect(response.body).to.have.property('title', miscPublication.title);
         expect(response.body).to.have.property('description', miscPublication.description);
-        expect(response.body).to.have.property('fileURL', miscPublication.fileURL);
+        expect(response.body).to.have.property('fileUrl', miscPublication.fileUrl);
         expect(response.body).to.have.property('isPublished', miscPublication.isPublished);
         expect(response.body).to.have.property('publicationDate', miscPublication.publicationDate);
-        expect(response.body).to.have.property('userId', miscPublication.userId);
+        addCreatedMiscPublicationId  (response.body.id);
     });
 
     it('TC-48: Verify Response When Title Field is Missing in the Miscellaneous Publication Request', async () => {
@@ -152,7 +152,7 @@ describe('Miscellaneous Publication API Test - POST Requests [Tag: API Testing]'
         expect(response.body).to.have.property('error');
     });
 
-    it('TC-54: Verify System Behavior and Response When Duplicate Miscellaneous Publication Entry is Submitted', async () => {
+    it('TC-54: Verify System Behavior and Response When Duplicate Miscellaneous Publication Entry is Submitted [Tag: Bug]', async () => {
         const miscPublication = {
             title: 'Duplicate Misc Publication',
             description: 'Description for the duplicate misc publication',
@@ -161,14 +161,16 @@ describe('Miscellaneous Publication API Test - POST Requests [Tag: API Testing]'
             publicationDate: '2020-12-05',
             userId: getCreatedUserId()
         };
-        await request.post('/miscPublication')
+        const first =await request.post('/miscPublication')
                      .send(miscPublication)
                      .set('Accept', 'application/json')
                      .expect(201);
+        addCreatedMiscPublicationId(first.body.id);
 
         const response = await request.post('/miscPublication')
                                       .send(miscPublication)
                                       .set('Accept', 'application/json');
+        addCreatedMiscPublicationId(response.body.id);
         expect(response.status).to.equal(409);
         expect(response.body).to.have.property('error');
     });

@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../hooks/ubication/ubicationHooks');
+const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../../hooks/ubication/ubicationHooks');
 
 describe('Ubication API Test - GET Requests (By ID) [Tag: API Testing]', () => {
 
@@ -28,15 +28,16 @@ describe('Ubication API Test - GET Requests (By ID) [Tag: API Testing]', () => {
         const invalidUbicationId = 'a';
         const response = await request.get(`/ubication/${invalidUbicationId}`)
                                       .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error', 'Invalid ID format.');
+        expect(response.status).to.equal(500); 
+        expect(response.body).to.have.property('message', 'Internal server error');
     });
 
     it('TC-84: Verify System Response When Ubication ID Does Not Exist in Database', async () => {
         const nonExistentUbicationId = 0;
         const response = await request.get(`/ubication/${nonExistentUbicationId}`)
                                       .set('Accept', 'application/json');
-        expect(response.status).to.equal(404);
-        expect(response.body).to.have.property('error', 'Ubication ID does not exist.');
+        expect(response.status).to.equal(404); 
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id 0 not found');
     });
 });

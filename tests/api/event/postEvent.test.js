@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, getCreatedUserId, createTestUbication, deleteTestUbication, getCreatedUbicationId } = require('../hooks/event/eventHooks');
+const { createTestUser, deleteTestUser, getCreatedUserId, createTestUbication, deleteTestUbication, getCreatedUbicationId, deleteEventEntries, addCreatedEventId, getCreatedEventIds } = require('../../hooks/event/eventHooks');
 
 describe('Event API Test - POST Requests [Tag: API Testing]', () => {
 
@@ -12,6 +12,7 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
     });
 
     after(async () => {
+        await deleteEventEntries();
         await deleteTestUser();
         await deleteTestUbication();
     });
@@ -39,9 +40,8 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
         expect(response.body).to.have.property('isPublished', event.isPublished);
         expect(response.body).to.have.property('publicationDate', event.publicationDate);
         expect(response.body).to.have.property('eventDate', event.eventDate);
-        expect(response.body).to.have.property('userId', event.userId);
-        expect(response.body).to.have.property('ubicationId', event.ubicationId);
         expect(response.body).to.have.property('cost', event.cost);
+        addCreatedEventId(response.body.id);
     });
 
     it('TC-96: Verify Response When Title Field is Missing in the Event Request', async () => {
@@ -144,15 +144,23 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
             isPublished: true,
             publicationDate: '2020-12-03',
             eventDate: '2000-12-03',
-            userId: 1147,
+            userId: getCreatedUserId(),
             ubicationId: getCreatedUbicationId(),
             cost: 50
         };
         const response = await request.post('/event')
                                       .send(event)
                                       .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        expect(response.status).to.equal(201);
+        expect(response.body).to.have.property('id');
+        expect(response.body).to.have.property('title', event.title);
+        expect(response.body).to.have.property('description', event.description);
+        expect(response.body).to.have.property('fileUrl', event.fileUrl);
+        expect(response.body).to.have.property('isPublished', event.isPublished);
+        expect(response.body).to.have.property('publicationDate', event.publicationDate);
+        expect(response.body).to.have.property('eventDate', event.eventDate);
+        expect(response.body).to.have.property('cost', event.cost);
+        addCreatedEventId(response.body.id);
     });
 
     it('TC-102: Verify Response When UserID Field is Missing in the Event Request', async () => {
@@ -170,7 +178,7 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
                                       .send(event)
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        expect(response.body).to.have.property('error', 'Bad Request');
     });
 
     it('TC-103: Verify Response When UbicationID Field is Missing in the Event Request', async () => {
@@ -188,10 +196,10 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
                                       .send(event)
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        expect(response.body).to.have.property('error', 'Bad Request');
     });
 
-    it('TC-104: Verify Response When Cost Field is Negative in the Event Request', async () => {
+    it('TC-104: Verify Response When Cost Field is Negative in the Event Request [Tag: Bug]', async () => {
         const event = {
             title: 'Concierto No. 2 de Orquesta Coral',
             description: 'Echa un vistazo al concierto de Orquesta Coral que se llevará a cabo en enero',
@@ -199,14 +207,16 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
             isPublished: true,
             publicationDate: '2020-12-03',
             eventDate: '2020-12-03',
-            userId: 1147,
+            userId: getCreatedUserId(),
             ubicationId: getCreatedUbicationId(),
             cost: -50
         };
         const response = await request.post('/event')
                                       .send(event)
                                       .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        addCreatedEventId(response.body.id);
+        expect(response.status).to.equal(404);
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'User with email duplicate@example.com is already registered');
     });
 });

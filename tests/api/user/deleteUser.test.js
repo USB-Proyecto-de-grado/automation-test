@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, getCreatedUserId } = require('../hooks/user/userHooks');
+const { createTestUser, deleteTestUser, getCreatedUserId } = require('../../hooks/user/userHooks');
 
 describe('User API Test - DELETE Requests [Tag: API Testing]', () => {
 

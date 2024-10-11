@@ -6,7 +6,7 @@ let createdUserId;
 let createdMiscPublicationIds = [];
 
 const createTestUser = async () => {
-    const user = { name: 'testUser', email: 'testUser@example.com' };
+    const user = { name: 'publicationTest', email: 'publication@example.com', roleId: 1 };
     const response = await request.post('/user')
                                   .send(user)
                                   .set('Accept', 'application/json');
@@ -64,4 +64,8 @@ const deleteTestUser = async () => {
     }
 };
 
-module.exports = { createTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, deleteTestUser, getCreatedMiscPublicationIds: () => createdMiscPublicationIds, getCreatedUserId: () => createdUserId };
+const addCreatedMiscPublicationId = (miscPublicationId) => {
+    createdMiscPublicationIds.push(miscPublicationId);
+};
+
+module.exports = { addCreatedMiscPublicationId, createTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, deleteTestUser, getCreatedMiscPublicationIds: () => createdMiscPublicationIds, getCreatedUserId: () => createdUserId };

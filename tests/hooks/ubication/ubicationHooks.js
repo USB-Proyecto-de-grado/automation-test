@@ -16,7 +16,6 @@ const createUbications = async (numUbications = 3) => {
         const response = await request.post('/ubication')
                                       .send(ubication)
                                       .set('Accept', 'application/json')
-                                      .set('Content-Type', 'application/json')
                                       .expect('Content-Type', /json/);
 
         if (response.status === 201) {

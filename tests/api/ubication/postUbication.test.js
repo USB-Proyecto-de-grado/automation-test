@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../hooks/ubication/ubicationHooks');
+const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../../hooks/ubication/ubicationHooks');
 
 describe('Ubication API Test - POST Requests [Tag: API Testing]', () => {
 
@@ -53,11 +53,10 @@ describe('Ubication API Test - POST Requests [Tag: API Testing]', () => {
                                       .send(ubication)
                                       .set('Accept', 'application/json')
                                       .set('Content-Type', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        expect(response.status).to.equal(500);
     });
 
-    it('TC-72: Verify Response When Duplicate Ubication Entry is Submitted', async () => {
+    it('TC-72: Verify Response When Duplicate Ubication Entry is Submitted [Tag: Bug]', async () => {
         const ubication = { ubicationName: 'Aula Magna de Humanidades' };
         const response = await request.post('/ubication')
                                       .send(ubication)

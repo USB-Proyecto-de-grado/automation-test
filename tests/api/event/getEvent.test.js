@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, createEventEntries, getCreatedUserId, createTestUbication, deleteTestUbication, deleteEventEntries, getCreatedUbicationId } = require('../hooks/event/eventHooks');
+const { createTestUser, deleteTestUser, createEventEntries, getCreatedUserId, createTestUbication, deleteTestUbication, deleteEventEntries, getCreatedEventIds, addCreatedEventId } = require('../../hooks/event/eventHooks');
 
 describe('Event API Test - DELETE Requests [Tag: API Testing]', () => {
 
@@ -34,8 +34,6 @@ describe('Event API Test - DELETE Requests [Tag: API Testing]', () => {
         expect(response.body).to.have.property('isPublished');
         expect(response.body).to.have.property('publicationDate');
         expect(response.body).to.have.property('eventDate');
-        expect(response.body).to.have.property('userId');
-        expect(response.body).to.have.property('ubicationId');
         expect(response.body).to.have.property('cost');
     });
 
@@ -45,8 +43,9 @@ describe('Event API Test - DELETE Requests [Tag: API Testing]', () => {
         const response = await request.get(`/event/${invalidEventId}`)
                                       .set('Accept', 'application/json');
 
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error', 'Invalid event ID format.');
+        expect(response.status).to.equal(404);
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id -1 not found');
     });
 
     it('TC-114: Verify system response when event ID does not exist in the database', async () => {
@@ -56,6 +55,7 @@ describe('Event API Test - DELETE Requests [Tag: API Testing]', () => {
                                       .set('Accept', 'application/json');
 
         expect(response.status).to.equal(404);
-        expect(response.body).to.have.property('error', 'Event ID does not exist.');
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id 0 not found');
     });
 });

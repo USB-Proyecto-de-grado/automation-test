@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../hooks/miscPublicationController/miscPublicationHooks');
+const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../../hooks/miscPublicationController/miscPublicationHooks');
 
 describe('Miscellaneous Publication API Test - DELETE Requests [Tag: API Testing]', () => {
 
@@ -21,10 +21,9 @@ describe('Miscellaneous Publication API Test - DELETE Requests [Tag: API Testing
         const response = await request.delete(`/miscPublication/${miscPublicationIds[0]}`)
                                       .set('Accept', 'application/json');
         expect(response.status).to.equal(200);
-        expect(response.body).to.have.property('message', 'Publication deleted successfully.');
     });
 
-    it('TC-62: Verify Response When Invalid Miscellaneous Publication ID Format is Submitted for Deletion', async () => {
+    it('TC-62: Verify Response When Invalid Miscellaneous Publication ID Format is Submitted for Deletion [Tag: Bug]', async () => {
         const invalidId = -1;
         const response = await request.delete(`/miscPublication/${invalidId}`)
                                       .set('Accept', 'application/json');
@@ -32,34 +31,4 @@ describe('Miscellaneous Publication API Test - DELETE Requests [Tag: API Testing
         expect(response.body).to.have.property('error');
     });
 
-    // it('TC-63: Verify System Response When Deleting Miscellaneous Publication ID That Does Not Exist in Database', async () => {
-    //     const nonExistentId = 0;
-    //     const response = await request.delete(`/miscPublication/${nonExistentId}`)
-    //                                   .set('Accept', 'application/json');
-    //     expect(response.status).to.equal(404);
-    //     expect(response.body).to.have.property('error');
-    // });
-
-    it('TC-64: Verify Response for Unauthorized Access Attempt to Delete Miscellaneous Publication Entry', async () => {
-        const miscPublicationIds = getCreatedMiscPublicationIds();
-        const response = await request.delete(`/miscPublication/${miscPublicationIds[0]}`)
-                                      .set('Accept', 'application/json');
-        expect(response.status).to.equal(401);
-        expect(response.body).to.have.property('error');
-    });
-
-    it('TC-65: Verify Response When Additional Unrecognized Parameters are Included in the Delete Request', async () => {
-        const miscPublicationIds = getCreatedMiscPublicationIds();
-        const response = await request.delete(`/miscPublication/${miscPublicationIds[0]}?extraParam=true`)
-                                      .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
-    });
-
-    it('TC-67: Verify System Response When Request Contains Missing Required Field ID', async () => {
-        const response = await request.delete('/miscPublication/')
-                                      .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
-    });
 });

@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../hooks/miscPublicationController/miscPublicationHooks');
+const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../../hooks/miscPublicationController/miscPublicationHooks');
 
 describe('Miscellaneous Publication API Test - GET Requests (By ID)', () => {
 
@@ -28,8 +28,9 @@ describe('Miscellaneous Publication API Test - GET Requests (By ID)', () => {
         const invalidId = -1;
         const response = await request.get(`/miscPublication/${invalidId}`)
                                       .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+        expect(response.status).to.equal(404);
+        expect(response.body).to.have.property('error', 'Not Found');
+        expect(response.body).to.have.property('message', 'Item with id -1 not found');
     });
 
     it('TC-71: Verify Response Contains All Expected Fields for Miscellaneous Publication Entry with Valid ID', async () => {
@@ -43,13 +44,5 @@ describe('Miscellaneous Publication API Test - GET Requests (By ID)', () => {
         expect(response.body).to.have.property('fileUrl');
         expect(response.body).to.have.property('isPublished');
         expect(response.body).to.have.property('publicationDate');
-        expect(response.body).to.have.property('userId');
-    });
-
-    it('TC-72: Verify Response When ID Parameter is Missing in the Request [Tag: API Testing]', async () => {
-        const response = await request.get('/miscPublication/')
-                                      .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
     });
 });

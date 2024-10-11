@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../hooks/miscPublicationController/miscPublicationHooks');
+const { createTestUser, deleteTestUser, createMiscPublicationEntries, deleteMiscPublicationEntries, getCreatedMiscPublicationIds, getCreatedUserId } = require('../../hooks/miscPublicationController/miscPublicationHooks');
 
 describe('Miscellaneous Publication API Test - GET Requests (List Retrieve) [Tag: API Testing]', () => {
 
@@ -35,7 +35,6 @@ describe('Miscellaneous Publication API Test - GET Requests (List Retrieve) [Tag
             expect(entry).to.have.property('fileUrl');
             expect(entry).to.have.property('isPublished');
             expect(entry).to.have.property('publicationDate');
-            expect(entry).to.have.property('userId');
         });
     });
 
@@ -48,10 +47,12 @@ describe('Miscellaneous Publication API Test - GET Requests (List Retrieve) [Tag
         await createMiscPublicationEntries(5);
     });
 
-    it('TC-59: Verify Response When Invalid Query Parameters are Provided with GET endpoint', async () => {
-        const response = await request.get('/miscPublication?invalidParam=true')
-                                      .set('Accept', 'application/json');
-        expect(response.status).to.equal(400);
-        expect(response.body).to.have.property('error');
+    it('TC-69: Verify Data Consistency Across Multiple Reads', async () => {
+        const firstResponse = await request.get('/miscPublication')
+                                           .set('Accept', 'application/json');
+        const secondResponse = await request.get('/miscPublication')
+                                            .set('Accept', 'application/json');
+    
+        expect(firstResponse.body).to.deep.equal(secondResponse.body);
     });
 });

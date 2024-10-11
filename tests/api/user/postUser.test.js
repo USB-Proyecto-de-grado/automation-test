@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
 
-const { createTestUser, deleteTestUser, getCreatedUserId } = require('../hooks/user/userHooks');
+const { createTestUser, deleteTestUser, getCreatedUserId } = require('../../hooks/user/userHooks');
 
 describe('User API Test - POST Requests [Tag: API Testing]', () => {
     let createdUserIds = [];

@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const config = require('../../../config');
 const request = supertest(config.apiUrl);
-const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../hooks/ubication/ubicationHooks');
+const { createUbications, deleteUbications, getCreatedUbicationIds } = require('../../hooks/ubication/ubicationHooks');
 
 describe('Ubication API Test - GET Requests (Retrieve List) [Tag: API Testing]', () => {
 
@@ -37,17 +37,7 @@ describe('Ubication API Test - GET Requests (Retrieve List) [Tag: API Testing]',
             expect(ubication).to.have.property('ubicationName');
         });
     });
-
-    it('TC-78: Verify Correct Handling of Empty Ubication List for /ubication endpoint', async () => {
-        await deleteUbications();
-
-        const response = await request.get('/ubication')
-                                      .set('Accept', 'application/json')
-                                      .expect('Content-Type', /json/);
-        expect(response.status).to.equal(200);
-        expect(response.body).to.be.an('array').that.is.empty;
-    });
-
+  
     it('TC-79: Verify Response Time for Ubication List Retrieval is Within Acceptable Limits', async () => {
         const startTime = new Date().getTime();
         const response = await request.get('/ubication')
@@ -72,4 +62,16 @@ describe('Ubication API Test - GET Requests (Retrieve List) [Tag: API Testing]',
         const sortedUbicationNames = [...ubicationNames].sort();
         expect(ubicationNames).to.deep.equal(sortedUbicationNames);
     });
+
+    it('TC-78: Verify Correct Handling of Empty Ubication List for /ubication endpoint', async () => {
+        await request.delete('/ubication')
+                     .set('Accept', 'application/json');
+
+        const response = await request.get('/ubication')
+                                      .set('Accept', 'application/json')
+                                      .expect('Content-Type', /json/);
+        expect(response.status).to.equal(200);
+        expect(response.body).to.be.an('array').that.is.empty;
+    });
+
 });

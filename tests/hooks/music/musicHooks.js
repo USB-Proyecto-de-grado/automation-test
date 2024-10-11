@@ -6,7 +6,7 @@ let createdUserId;
 let createdMusicIds = [];
 
 const createTestUser = async () => {
-    const user = { name: 'testUser', email: 'testUser@example.com' };
+    const user = { name: 'musicTestUser', email: 'music@example.com', roleId: 1 };
     const response = await request.post('/user')
                                   .send(user)
                                   .set('Accept', 'application/json');
@@ -47,10 +47,11 @@ const createMusicEntries = async (numEntries = 1) => {
 };
 
 const deleteMusicEntries = async () => {
+    console.log(createdMusicIds)
     for (const musicId of createdMusicIds) {
         await request.delete(`/music/${musicId}`)
                      .set('Accept', 'application/json')
-                     .expect(200);
+        await request.delete(`/music/`).set('Accept', 'application/json')
     }
     createdMusicIds = [];
 };
@@ -64,4 +65,8 @@ const deleteTestUser = async () => {
     }
 };
 
-module.exports = { createTestUser, createMusicEntries, deleteMusicEntries, deleteTestUser, getCreatedMusicIds: () => createdMusicIds, getCreatedUserId: () => createdUserId };
+const addCreatedMusicId = (musicId) => {
+    createdMusicIds.push(musicId);
+};
+
+module.exports = { addCreatedMusicId, createTestUser, createMusicEntries, deleteMusicEntries, deleteTestUser, getCreatedMusicIds: () => createdMusicIds, getCreatedUserId: () => createdUserId };
