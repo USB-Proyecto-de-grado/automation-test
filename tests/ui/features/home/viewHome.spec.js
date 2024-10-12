@@ -22,7 +22,7 @@ describe('Feature Tests for Download Button [Tag: Acceptance Testing]', function
         await driver.quit();
     });
 
-    it('should click on the download button for "Revista Contrapunto (2023)" and verify redirection [Tag: Functional Testing]', async function() {
+    it('TC-142: should click on the download button for "Revista Contrapunto (2023)" and verify redirection [Tag: Functional Testing]', async function() {
         await homePage.clickDropdown();
         await driver.sleep(3000);
         await homePage.clickContrapuntoButton();
@@ -34,7 +34,7 @@ describe('Feature Tests for Download Button [Tag: Acceptance Testing]', function
         console.log('Redirection to the correct URL confirmed.');
     });
 
-    it('should verify the title and description in the "Interpretaciones musicales" section  [Tag: Content Verification]', async function() {
+    it('TC-144: should verify the title and description in the "Interpretaciones musicales" section  [Tag: Content Verification]', async function() {
         const titleSelector = '.MuiBox-root.css-212bt0 h2.MuiTypography-h2';
         const descriptionSelector = '.MuiBox-root.css-212bt0 p.MuiTypography-body1';
 
@@ -46,7 +46,7 @@ describe('Feature Tests for Download Button [Tag: Acceptance Testing]', function
         assert.strictEqual(description, 'Nuestro enfoque pedagógico desarrolla las habilidades creativas de los estudiantes a través de la interpretación y producción musical, sin importar el género musical al que este se dedique.');
     });
 
-    it('should verify the content of the Professional Profile section  [Tag: Content Verification]', async function() {
+    it('TC-145: should verify the content of the Professional Profile section  [Tag: Content Verification]', async function() {
         const titleSelector = '.MuiBox-root.css-v6hcfe h2.MuiTypography-h2';
         const itemsSelector = '.MuiBox-root.css-v6hcfe .MuiListItem-root';
 

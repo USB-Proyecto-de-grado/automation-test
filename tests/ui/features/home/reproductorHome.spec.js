@@ -34,7 +34,7 @@ describe('Feature Tests for Random Player  [Tag: GUI Testing][Tag: Functional Te
     });
 
 
-    it('should play the video and verify it is playing by checking time progression [Tag: Usability Testing]', async function() {
+    it('TC-139: should play the video and verify it is playing by checking time progression [Tag: Usability Testing]', async function() {
         await homePage.clickDropdown();
         const iframe = await driver.findElement(By.css('iframe'));
         await driver.switchTo().frame(iframe);
@@ -48,7 +48,7 @@ describe('Feature Tests for Random Player  [Tag: GUI Testing][Tag: Functional Te
         assert(laterTime > initialTime, 'El video no está avanzando; currentTime no se ha incrementado.');
     });
 
-    it('should verify that clicking "Reproducir al Azar" changes the video title [Tag: Usability Testing]', async function() {
+    it('TC-140: should verify that clicking "Reproducir al Azar" changes the video title [Tag: Usability Testing]', async function() {
         await homePage.clickDropdown();
         const iframe = await driver.findElement(By.css('iframe'));
         await driver.switchTo().frame(iframe);
@@ -63,7 +63,7 @@ describe('Feature Tests for Random Player  [Tag: GUI Testing][Tag: Functional Te
         expect(newTitle).not.to.equal(initialTitle);
     });
 
-    it('should play video, click "Reproducir al Azar", and play new video [Tag: Usability Testing]', async function() {
+    it('TC-141: should play video, click "Reproducir al Azar", and play new video [Tag: Usability Testing]', async function() {
         await homePage.clickDropdown();
         const iframe = await driver.findElement(By.css('iframe'));
         await driver.switchTo().frame(iframe);

@@ -35,7 +35,7 @@ describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Test
         await driver.quit();
     });
 
-    it('should fill the form and submit successfull [Tag: Positive][Tag: Submission]', async function() {
+    it('TC-162: should fill the form and submit successfull [Tag: Positive][Tag: Submission]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: 'Publicación de prueba',
@@ -48,7 +48,7 @@ describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Test
         assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
     });
 
-    it('should show an error when submitting with invalid data [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-163: should show an error when submitting with invalid data [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: ' ',
@@ -61,7 +61,7 @@ describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Test
         assert.strictEqual(isMessageDisplayed, true, 'El mensaje de error no fue mostrado correctamente');
     });
 
-    it('should show an error when submitting with the tile with empty space [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-164: should show an error when submitting with the tile with empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: ' ',
@@ -75,7 +75,7 @@ describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Test
     });
 
     
-    it('should show an error when submitting with the description with empty space [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-165: should show an error when submitting with the description with empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: 'Publicación de prueba',

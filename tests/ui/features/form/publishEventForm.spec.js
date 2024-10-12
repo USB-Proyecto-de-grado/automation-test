@@ -42,7 +42,7 @@ describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
     await driver.quit();
   });
 
-  it('should fill the form and submit successfully [Tag: Positive]', async function () {
+  it('TC-150: should fill the form and submit successfully [Tag: Positive]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -58,7 +58,7 @@ describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
     assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
   });
 
-  it('submit successfully when the ubication dont exist in the database [Tag: Edge Case]', async function () {
+  it('TC-151: submit successfully when the ubication dont exist in the database [Tag: Edge Case]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -74,7 +74,7 @@ describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
     assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
   });
 
-  it('should show validation errors when the price is negative [Tag: Negative][Tag: Validation]', async function () {
+  it('TC-152: should show validation errors when the price is negative [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -90,7 +90,7 @@ describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isMessageDisplayed, true);
   });
 
-  it('should show validation errors when the title is with an empty space [Tag: Negative][Tag: Validation]', async function () {
+  it('TC-153: should show validation errors when the title is with an empty space [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: ' ',
@@ -106,7 +106,7 @@ describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isMessageDisplayed, true);
   });
 
-  it('should show validation errors when the description is with an empty space  [Tag: Negative][Tag: Validation]', async function () {
+  it('TC-154: should show validation errors when the description is with an empty space  [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',
@@ -122,7 +122,7 @@ describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
     assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
   });
 
-  it('should show validation errors when the description is with an empty space  [Tag: Negative][Tag: Validation]', async function () {
+  it('TC-155: should show validation errors when the description is with an empty space  [Tag: Negative][Tag: Validation]', async function () {
     await driver.sleep(5000)
     await publishEventFormPage.fillEventForm({
       title: 'Veladas de invierno - UMSS',

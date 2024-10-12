@@ -40,7 +40,7 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         }
     });
 
-    it('should detect and handle an invalid YouTube link submission [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-156: should detect and handle an invalid YouTube link submission [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000);
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=InvalidVideoID', // Invalid Link
@@ -54,7 +54,7 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isVideoUnavailableMessageDisplayed, true, 'Expected error message not displayed for unavailable video');
     });
 
-    it('should fill the form and submit successfully [Tag: Positive][Tag: Submission]', async function() {
+    it('TC-157: should fill the form and submit successfully [Tag: Positive][Tag: Submission]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
@@ -68,7 +68,7 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when fields the field Link is worng typed [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-158: should show validation errors when fields the field Link is worng typed [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'a',
@@ -82,7 +82,7 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when the youtubeLink is with an empty space [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-159: should show validation errors when the youtubeLink is with an empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: ' ',
@@ -96,7 +96,7 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when the title is with an empty space [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-160: should show validation errors when the title is with an empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
@@ -110,7 +110,7 @@ describe('Publish Music Form Tests [Tag: GUI Testing][Tag: Functional Testing]',
         assert.strictEqual(isMessageDisplayed, true);
     });
 
-    it('should show validation errors when the description is with an empty space [Tag: Negative][Tag: Validation]', async function() {
+    it('TC-161: should show validation errors when the description is with an empty space [Tag: Negative][Tag: Validation]', async function() {
         await driver.sleep(5000)
         await publishMusicFormPage.fillMusicForm({
             youTubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',

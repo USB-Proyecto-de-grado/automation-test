@@ -3,5 +3,6 @@ module.exports = {
     uiUrl: 'http://localhost:3000',
     googleUser: "juanzq10dev@gmail.com",
     googlePassword: "10fe2002",
-
-};
+    studentUser: "teststudentpg@gmail.com",
+    studentUserPassword: "teststudentpg123"
+};  
