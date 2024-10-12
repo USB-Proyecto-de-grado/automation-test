@@ -18,7 +18,7 @@ describe('Event API Test - DELETE Requests  [Tag: API Testing]', () => {
         await deleteTestUser();
     });
 
-    it('TC-117: Verify successful deletion of event entry when valid ID is provided', async () => {
+    it('TC-117: Verify successful deletion of event entry when valid ID is provided [Tag: API Testing]', async () => {
         const eventIds = getCreatedEventIds();
         const eventId = eventIds[0];
         console.log('Event ID for TC-117:', eventId);

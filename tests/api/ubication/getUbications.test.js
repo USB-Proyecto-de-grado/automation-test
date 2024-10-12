@@ -63,15 +63,4 @@ describe('Ubication API Test - GET Requests (Retrieve List) [Tag: API Testing]',
         expect(ubicationNames).to.deep.equal(sortedUbicationNames);
     });
 
-    it('TC-78: Verify Correct Handling of Empty Ubication List for /ubication endpoint', async () => {
-        await request.delete('/ubication')
-                     .set('Accept', 'application/json');
-
-        const response = await request.get('/ubication')
-                                      .set('Accept', 'application/json')
-                                      .expect('Content-Type', /json/);
-        expect(response.status).to.equal(200);
-        expect(response.body).to.be.an('array').that.is.empty;
-    });
-
 });

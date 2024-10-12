@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const config = require('../../../../config');
+const config = require('../../../config');
 const request = supertest(config.apiUrl);
 
 let createdUserId;
