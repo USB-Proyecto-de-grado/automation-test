@@ -1,11 +1,11 @@
-const buildDriver = require('../../../../main/core/driverSetUp');
-const PreTestSetup = require('../../../../main/setup/preSetUp');
-const PublishEventFormPage = require('../../../../page-objects/publishPages/publishEventFormPage');
-const ErrorValidationPage = require('../../../../page-objects/common/errorValidationPage');
-const AlertSnackBarPage = require('../../../../page-objects/common/alertSnackBarPage');
-const { takeScreenshot } = require('../../../../utils/screenshotUtils');
+const buildDriver = require('../../../main/core/driverSetUp');
+const PreTestSetup = require('../../../main/setup/preSetUp');
+const PublishEventFormPage = require('../../../page-objects/publishPages/publishEventFormPage');
+const ErrorValidationPage = require('../../../page-objects/common/errorValidationPage');
+const AlertSnackBarPage = require('../../../page-objects/common/alertSnackBarPage');
+const { takeScreenshot } = require('../../../utils/screenshotUtils');
 const addContext = require('mochawesome/addContext');
-const config = require('../../../../config');
+const config = require('../../../config');
 const assert = require('assert');
 
 describe('Publish Event Form Tests [Tag: GUI Testing][Tag: Functional Testing]', function () {

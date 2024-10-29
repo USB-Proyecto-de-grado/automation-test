@@ -1,12 +1,12 @@
 const { Builder, By, until } = require('selenium-webdriver');
-const buildDriver = require('../../../../main/core/driverSetUp');
-const config = require('../../../../config');
+const buildDriver = require('../../../main/core/driverSetUp');
+const config = require('../../../config');
 const assert = require('assert');
 const chai = require('chai');
 const expect = chai.expect;
-const HomePage = require('../../../../page-objects/home/homePage');
-const VideoPlayerPage = require('../../../../page-objects/common/videoPlayerPage');
-const { takeScreenshot } = require('../../../../utils/screenshotUtils');
+const HomePage = require('../../../page-objects/home/homePage');
+const VideoPlayerPage = require('../../../page-objects/common/videoPlayerPage');
+const { takeScreenshot } = require('../../../utils/screenshotUtils');
 const addContext = require('mochawesome/addContext');
 
 describe('Feature Tests for Random Player', function() {

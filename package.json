@@ -7,6 +7,7 @@
     "test:ui": "mocha  --experimental-modules 'tests/ui/**/*.spec.js'  --reporter mochawesome --reporter-options reportDir=reports/ui,reportFilename=uiReport,charts=true",
     "test:api": "mocha 'tests/api/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport,charts=true",
     "test:custom": "mocha 'tests/**/*.js' --grep \"\\[Tag: YourCustomTag\\]\"  --reporter mochawesome --reporter-options reportDir=reports/custom,reportFilename=customReport,overwrite=false,charts=true",
+    "test:ids": "mocha 'tests/**/*.js' --grep $npm_config_ids --reporter mochawesome --reporter-options reportDir=reports/custom,reportFilename=customReport,overwrite=false,charts=true",
     "test": "npm run test:ui && npm run test:api",
     "start-gui": "electron main/app/main.js"
   },

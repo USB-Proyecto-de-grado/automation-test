@@ -2,8 +2,8 @@ const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 const chai = require('chai');
 const expect = chai.expect;
-const HomePage = require('../../../../page-objects/home/homePage');
-const config = require('../../../../config');
+const HomePage = require('../../../page-objects/home/homePage');
+const config = require('../../../config');
 
 describe('Feature Tests for Download Button', function() {
     this.timeout(30000);

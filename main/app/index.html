@@ -15,64 +15,84 @@
       <button id="add-test-case" class="btn-primary">Add Test Case</button>
     </section>
 
-    <!-- Modal for Creating a Test Case -->
-    <div id="add-test-case-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <form id="test-case-form">
-          <label for="test-type">Choose a test type:</label>
-          <select id="test-type">
-            <option value="api">API</option>
-            <option value="ui">UI</option>
-          </select>
-
-          <!-- Existing or New Feature Selection -->
-          <label for="feature-type">Choose an option:</label>
-          <select id="feature-type">
-            <option value="existing">Existing Feature/Endpoint</option>
-            <option value="new">New Feature/Endpoint</option>
-          </select>
-
-          <!-- Existing Feature Dropdown (populated dynamically) -->
-          <div id="existing-feature-container">
-            <label for="existing-feature">Select Existing Feature/Endpoint:</label>
-            <select id="existing-feature"></select>
+  <!-- Modal for Creating a Test Case -->
+<div id="add-test-case-modal" class="modal">
+  <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Create a Test Case</h2>
+      <form id="test-case-form">
+          <div class="form-row">
+              <label for="test-type">Choose a test type:</label>
+              <select id="test-type">
+                  <option value="api">API</option>
+                  <option value="ui">UI</option>
+              </select>
           </div>
 
-          <!-- New Feature Input -->
-          <div id="new-feature-container" style="display:none;">
-            <label for="new-feature">New Feature/Endpoint Name:</label>
-            <input type="text" id="new-feature" name="new-feature">
+          <div class="form-row">
+              <label for="feature-type">Choose an option:</label>
+              <select id="feature-type">
+                  <option value="existing">Existing Feature/Endpoint</option>
+                  <option value="new">New Feature/Endpoint</option>
+              </select>
           </div>
 
+          <div id="existing-feature-container" class="form-row">
+              <label for="existing-feature">Select Existing Feature/Endpoint:</label>
+              <select id="existing-feature"></select>
+          </div>
 
-          <label for="test-case-id">Test Case ID:</label>
-          <input type="text" id="test-case-id" name="test-case-id" required>
+          <div id="new-feature-container" class="form-row" style="display:none;">
+              <label for="new-feature">New Feature/Endpoint Name:</label>
+              <input type="text" id="new-feature" name="new-feature">
+          </div>
 
-          <label for="test-name">Test Case Name:</label>
-          <input type="text" id="test-name" name="test-name" required>
+          <div class="form-row">
+              <label for="test-case-id">Test Case ID:</label>
+              <input type="text" id="test-case-id" name="test-case-id" required>
+          </div>
 
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" required></textarea>
+          <div class="form-row">
+              <label for="test-name">Test Case Name:</label>
+              <input type="text" id="test-name" name="test-name" required>
+          </div>
 
-          <fieldset>
-            <legend>Select Tags:</legend>
-            <label><input type="checkbox" name="tags" value="Smoke Testing">Smoke Testing</label>
-            <label><input type="checkbox" name="tags" value="Functional">Functional Testing</label>
-            <label><input type="checkbox" name="tags" value="Acceptance">Acceptance Testing</label>
-            <label><input type="checkbox" name="tags" value="Negative">Negative Testing</label>
-            <label><input type="checkbox" name="tags" value="Non-Functional">Non-Functional Testing</label>
-          </fieldset>
+          <div class="form-row">
+              <label for="description">Description:</label>
+              <textarea id="description" name="description" required></textarea>
+          </div>
+
+          <div class="form-row">
+            <fieldset>
+                <legend>Select Tags:</legend>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tags" value="Smoke Testing"> Smoke Testing</label>
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tags" value="Functional Testing"> Functional Testing</label>
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tags" value="Acceptance Testing"> Acceptance Testing</label>
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tags" value="Negative Testing"> Negative Testing</label>
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tags" value="Non-Functional Testing"> Non-Functional Testing</label>
+                </div>
+            </fieldset>
+        </div>
+        
 
           <button type="submit" class="btn-primary">Create Test Case File</button>
-        </form>
-      </div>
-    </div>
+      </form>
+  </div>
+</div>
 
 
     <!-- Encabezado y checkboxes para la selección de tipo de prueba -->
     <h1>Test Case Viewer</h1>
-    <div id="test-type-checkboxes">
+    <div id="test-type-checkboxes" class="checkbox-grid">
       <label><input type="checkbox" value="all" class="test-type"> All</label>
       <label><input type="checkbox" value="API Testing" class="test-type"> API Testing</label>
       <label><input type="checkbox" value="GUI Testing" class="test-type"> GUI Testing</label>
@@ -80,8 +100,8 @@
       <label><input type="checkbox" value="Functional Testing" class="test-type"> Functional Testing</label>
       <label><input type="checkbox" value="Acceptance Testing" class="test-type"> Acceptance Testing</label>
       <label><input type="checkbox" value="Negative Testing" class="test-type"> Negative Testing</label>
-      <label><input type="checkbox" value="End To End Testing" class="test-type"> End To End Testing</label>
       <label><input type="checkbox" value="Non-Functional Testing" class="test-type"> Non-Functional Testing</label>
+      <label><input type="checkbox" value="Bug" class="test-type"> Bug</label>
     </div>
     <p>Total Cases Shown: <span id="total-cases-shown">0</span></p>
     <!-- Test Case List -->

@@ -69,6 +69,8 @@ function populateCustomTestDropdown() {
   });
 }
 
+// TEST CASES
+
 document.addEventListener('DOMContentLoaded', populateCustomTestDropdown);
 
 document.querySelectorAll('.test-type').forEach(checkbox => {
@@ -76,18 +78,23 @@ document.querySelectorAll('.test-type').forEach(checkbox => {
 });
 
 function handleCheckboxChange() {
-  const allTypes = document.querySelectorAll('.test-type:not([value="all"])');
-  const allChecked = [...allTypes].every(checkbox => checkbox.checked);
-  const noneChecked = [...allTypes].every(checkbox => !checkbox.checked);
+  const allCheckbox = document.querySelector('.test-type[value="all"]');
+  const individualCheckboxes = document.querySelectorAll('.test-type:not([value="all"])');
+  const allChecked = [...individualCheckboxes].every(checkbox => checkbox.checked);
   
   if (this.value === 'all') {
-    allTypes.forEach(checkbox => checkbox.checked = this.checked);
-  } else if (allChecked || noneChecked) {
-    document.querySelector('.test-type[value="all"]').checked = allChecked;
+    // If 'All' checkbox state changes, update all other checkboxes to the same state
+    individualCheckboxes.forEach(checkbox => checkbox.checked = this.checked);
+  } else {
+    // Update 'All' checkbox based on the state of individual checkboxes
+    allCheckbox.checked = allChecked;
   }
 
+  // Control display of test cases based on checkboxes
   displayTestCases();
 }
+
+
 document.querySelectorAll('.test-type').forEach(checkbox => {
   checkbox.addEventListener('change', function() {
       if (this.value === 'all') {
@@ -116,38 +123,45 @@ ipcRenderer.on('test-cases-updated', (event, scenarios) => {
 
 // Function to display test cases based on selected tags
 function displayTestCases() {
-    const selectedTags = getSelectedTags();
-    const listElement = document.getElementById('test-case-list');
-    listElement.innerHTML = ''; // Clear existing list
+  const selectedTags = getSelectedTags();
+  const listElement = document.getElementById('test-case-list');
+  listElement.innerHTML = ''; // Clear existing list before updating
 
-    // Filter scenarios by selected tags
+  if (document.querySelector('.test-type[value="all"]').checked || selectedTags.length > 0) {
+    // Filter and display scenarios if 'All' is checked or any individual checkbox is checked
     const filteredScenarios = allScenarios.filter(scenario => {
-        return selectedTags.length === 0 || scenario.tags.some(tag => selectedTags.includes(tag));
+      return document.querySelector('.test-type[value="all"]').checked || scenario.tags.some(tag => selectedTags.includes(tag));
     });
 
-    // Display filtered scenarios
+    // Add filtered scenarios to the list
     filteredScenarios.forEach(scenario => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${scenario.scenario} (File: ${scenario.file})}`;
-        listElement.appendChild(listItem);
+      const listItem = document.createElement('li');
+      listItem.textContent = `${scenario.scenario} (File: ${scenario.file})`;
+      listElement.appendChild(listItem);
     });
 
+    // Update displayed count
     document.getElementById('total-cases-shown').textContent = filteredScenarios.length;
-
-    // Show message if no cases match
-    if (filteredScenarios.length === 0) {
-        const noCasesMessage = document.createElement('li');
-        noCasesMessage.textContent = 'No test cases match the selected filters.';
-        listElement.appendChild(noCasesMessage);
-    }
+  } else {
+    // No checkboxes are checked
+    const noCasesMessage = document.createElement('li');
+    noCasesMessage.textContent = 'No test cases match the selected filters.';
+    listElement.appendChild(noCasesMessage);
+    document.getElementById('total-cases-shown').textContent = '0';
+  }
 }
 
-// Helper function to retrieve selected tags
 function getSelectedTags() {
-    return Array.from(document.querySelectorAll('.test-type:checked')).map(checkbox => checkbox.value);
+  // Get values of all checked checkboxes except 'All'
+  return Array.from(document.querySelectorAll('.test-type:checked:not([value="all"])')).map(checkbox => checkbox.value);
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  displayTestCases(); // To ensure correct display on initial load
+});
 
+
+//MODAL
 
 document.addEventListener('DOMContentLoaded', function() {
   // Load existing API/UI folders
@@ -161,10 +175,10 @@ document.getElementById('test-type').addEventListener('change', function(e) {
 });
 
 // Function to load folders based on test type
+// Ensure to clear previous options before loading new ones to prevent duplicates
 function loadFolders(type) {
-  // Clear the existing options in the dropdown
   const existingFeatureDropdown = document.getElementById('existing-feature');
-  existingFeatureDropdown.innerHTML = '';  // Clear previous options
+  existingFeatureDropdown.innerHTML = ''; // Always clear previous options first
 
   // Send an IPC request to load folders for the specified type
   ipcRenderer.send('load-folders', type);
@@ -174,21 +188,37 @@ function loadFolders(type) {
 ipcRenderer.on('folders-loaded', (event, { type, folders }) => {
   const existingFeatureDropdown = document.getElementById('existing-feature');
 
-  // Populate the dropdown with received folders
-  folders.forEach(folder => {
-    const option = document.createElement('option');
-    option.value = folder;
-    option.text = folder;
-    existingFeatureDropdown.appendChild(option);
-  });
+  // Check if any folders are received and populate accordingly
+  if (folders.length === 0) {
+    const noOption = document.createElement('option');
+    noOption.textContent = 'No existing features found';
+    noOption.disabled = true;
+    existingFeatureDropdown.appendChild(noOption);
+  } else {
+    // Append folders to dropdown without duplicating
+    folders.forEach(folder => {
+      if (!Array.from(existingFeatureDropdown.options).some(option => option.value === folder)) {
+        const option = document.createElement('option');
+        option.value = folder;
+        option.textContent = folder;
+        existingFeatureDropdown.appendChild(option);
+      }
+    });
+  }
 });
+
+// This function is called when the modal is opened
+function initializeDropdown() {
+  const testType = document.getElementById('test-type').value;
+  loadFolders(testType); // Load folders based on the initially selected test type
+}
 
 // Toggle visibility of input fields based on feature selection
 document.getElementById('feature-type').addEventListener('change', function(e) {
   const selectedOption = e.target.value;
   const existingFeatureContainer = document.getElementById('existing-feature-container');
   const newFeatureContainer = document.getElementById('new-feature-container');
-  
+
   if (selectedOption === 'existing') {
     existingFeatureContainer.style.display = 'block';
     newFeatureContainer.style.display = 'none';
@@ -275,9 +305,9 @@ var btn = document.getElementById("add-test-case");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
 btn.onclick = function() {
   modal.style.display = "block";
+  initializeDropdown();
 }
 
 // When the user clicks on <span> (x), close the modal

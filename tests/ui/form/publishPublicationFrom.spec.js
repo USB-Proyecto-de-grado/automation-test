@@ -1,10 +1,10 @@
-const buildDriver = require('../../../../main/core/driverSetUp');
-const PreTestSetup = require('../../../../main/setup/preSetUp');
-const PublishPublicationFormPage = require('../../../../page-objects/publishPages/publishPublicationFormPage');
-const AlertSnackBarPage = require('../../../../page-objects/common/alertSnackBarPage');
-const { takeScreenshot } = require('../../../../utils/screenshotUtils');
+const buildDriver = require('../../../main/core/driverSetUp');
+const PreTestSetup = require('../../../main/setup/preSetUp');
+const PublishPublicationFormPage = require('../../../page-objects/publishPages/publishPublicationFormPage');
+const AlertSnackBarPage = require('../../../page-objects/common/alertSnackBarPage');
+const { takeScreenshot } = require('../../../utils/screenshotUtils');
 const addContext = require('mochawesome/addContext');
-const config = require('../../../../config');
+const config = require('../../../config');
 const assert = require('assert');
 
 describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Testing]', function() {
