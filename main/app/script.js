@@ -69,7 +69,7 @@ function populateCustomTestDropdown() {
   });
 }
 
-// TEST CASES
+// TEST
 
 document.addEventListener('DOMContentLoaded', populateCustomTestDropdown);
 
@@ -125,34 +125,38 @@ ipcRenderer.on('test-cases-updated', (event, scenarios) => {
 function displayTestCases() {
   const selectedTags = getSelectedTags();
   const listElement = document.getElementById('test-case-list');
-  listElement.innerHTML = ''; // Clear existing list before updating
+  listElement.innerHTML = ''; // Clear the table before updating
 
-  if (document.querySelector('.test-type[value="all"]').checked || selectedTags.length > 0) {
-    // Filter and display scenarios if 'All' is checked or any individual checkbox is checked
-    const filteredScenarios = allScenarios.filter(scenario => {
-      return document.querySelector('.test-type[value="all"]').checked || scenario.tags.some(tag => selectedTags.includes(tag));
-    });
+  const filteredScenarios = allScenarios.filter(scenario => {
+    return document.querySelector('.test-type[value="all"]').checked || scenario.tags.some(tag => selectedTags.includes(tag));
+  });
 
-    // Add filtered scenarios to the list
-    filteredScenarios.forEach(scenario => {
-      const listItem = document.createElement('li');
-      listItem.textContent = `${scenario.scenario} (File: ${scenario.file})`;
-      listElement.appendChild(listItem);
-    });
+  filteredScenarios.forEach(scenario => {
+    const row = document.createElement('tr');
+    
+    const cellSelect = document.createElement('td');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    cellSelect.appendChild(checkbox);
+    
+    const cellId = document.createElement('td');
+    cellId.textContent = scenario.id;
+    
+    const cellTitle = document.createElement('td');
+    cellTitle.textContent = scenario.scenario;
+    
+    row.appendChild(cellSelect);
+    row.appendChild(cellId);
+    row.appendChild(cellTitle);
+    
+    listElement.appendChild(row);
+  });
 
-    // Update displayed count
-    document.getElementById('total-cases-shown').textContent = filteredScenarios.length;
-  } else {
-    // No checkboxes are checked
-    const noCasesMessage = document.createElement('li');
-    noCasesMessage.textContent = 'No test cases match the selected filters.';
-    listElement.appendChild(noCasesMessage);
-    document.getElementById('total-cases-shown').textContent = '0';
-  }
+  document.getElementById('total-cases-shown').textContent = filteredScenarios.length.toString();
 }
 
+// Get values of all checked checkboxes except 'All'
 function getSelectedTags() {
-  // Get values of all checked checkboxes except 'All'
   return Array.from(document.querySelectorAll('.test-type:checked:not([value="all"])')).map(checkbox => checkbox.value);
 }
 

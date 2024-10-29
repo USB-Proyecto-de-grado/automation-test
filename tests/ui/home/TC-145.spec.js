@@ -22,36 +22,15 @@ describe('Feature Tests for Download Button', function() {
         await driver.quit();
     });
 
-    it('TC-142: should click on the download button for "Revista Contrapunto (2023)" and verify redirection [Tag: Functional Testing]', async function() {
-        await homePage.clickDropdown();
-        await driver.sleep(3000);
-        await homePage.clickContrapuntoButton();
-        await driver.sleep(3000);
-
-        const currentUrl = await driver.getCurrentUrl();
-        assert.strictEqual(currentUrl, 'https://www.hum.umss.edu.bo/wp-content/uploads/2023/12/CONTRAPUNTO-2023-Formato-pequeno.pdf', 'La URL no coincide con la esperada después de la redirección.');
-
-        console.log('Redirection to the correct URL confirmed.');
-    });
-
-    it('TC-144: should verify the title and description in the "Interpretaciones musicales" section [Tag: Non-Functional Testing]', async function() {
-        const titleSelector = '.MuiBox-root.css-212bt0 h2.MuiTypography-h2';
-        const descriptionSelector = '.MuiBox-root.css-212bt0 p.MuiTypography-body1';
-
-        await driver.wait(until.elementLocated(By.css(titleSelector)), 10000);
-        const title = await driver.findElement(By.css(titleSelector)).getText();
-        const description = await driver.findElement(By.css(descriptionSelector)).getText();
-
-        assert.strictEqual(title, 'Interpretaciones musicales');
-        assert.strictEqual(description, 'Nuestro enfoque pedagógico desarrolla las habilidades creativas de los estudiantes a través de la interpretación y producción musical, sin importar el género musical al que este se dedique.');
-    });
-
-    it('TC-145: should verify the content of the Professional Profile section  [Tag: Non-Functional Testing]', async function() {
+    it('TC-145: should verify the content of the Professional Profile section [Tag: GUI Testing] [Tag: Non-Functional Testing]', async function() {
+        // When the professional profile section content is checked
         const titleSelector = '.MuiBox-root.css-v6hcfe h2.MuiTypography-h2';
         const itemsSelector = '.MuiBox-root.css-v6hcfe .MuiListItem-root';
 
         await driver.wait(until.elementLocated(By.css(titleSelector)), 10000);
         const title = await driver.findElement(By.css(titleSelector)).getText();
+
+        // Then the profile items should match the expected content
         assert.strictEqual(title, 'Perfil Profesional');
 
         const items = await driver.findElements(By.css(itemsSelector));

@@ -35,20 +35,8 @@ describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Test
         await driver.quit();
     });
 
-    it('TC-162: should fill the form and submit successfull [Tag: GUI Testing] [Tag: Acceptance Testing] [Tag: Functional Testing] [Tag: Smoke Testing]', async function() {
-        await driver.sleep(5000)
-        await publishPublicationFormPage.fillPublicationForm({
-            title: 'Publicación de prueba',
-            description: 'Esta es una descripción de prueba.',
-        });
-
-        await publishPublicationFormPage.submitForm();
-
-        const isMessageDisplayed = await alertSnackBarPage.verifyMessage('Publicado de manera exitosa');
-        assert.strictEqual(isMessageDisplayed, true, 'El mensaje de éxito no fue mostrado correctamente');
-    });
-
     it('TC-163: should show an error when submitting with invalid data [Tag: GUI Testing] [Tag: Negative Testing] [Tag: Functional Testing]', async function() {
+        // When the user submits the form with invalid data (empty title and description)
         await driver.sleep(5000)
         await publishPublicationFormPage.fillPublicationForm({
             title: ' ',
@@ -57,33 +45,7 @@ describe('Publish Publication Form Tests [Tag: GUI Testing][Tag: Functional Test
 
         await publishPublicationFormPage.submitForm();
 
-        const isMessageDisplayed = await alertSnackBarPage.verifyMessage('Parámetros incorrectos');
-        assert.strictEqual(isMessageDisplayed, true, 'El mensaje de error no fue mostrado correctamente');
-    });
-
-    it('TC-164: should show an error when submitting with the tile with empty space [Tag: GUI Testing] [Tag: Negative Testing] [Tag: Functional Testing]', async function() {
-        await driver.sleep(5000)
-        await publishPublicationFormPage.fillPublicationForm({
-            title: ' ',
-            description: 'Esta es una descripción de prueba.',
-        });
-
-        await publishPublicationFormPage.submitForm();
-
-        const isMessageDisplayed = await alertSnackBarPage.verifyMessage('Parámetros incorrectos');
-        assert.strictEqual(isMessageDisplayed, true, 'El mensaje de error no fue mostrado correctamente');
-    });
-
-    
-    it('TC-165: should show an error when submitting with the description with empty space [Tag: GUI Testing] [Tag: Negative Testing] [Tag: Functional Testing]', async function() {
-        await driver.sleep(5000)
-        await publishPublicationFormPage.fillPublicationForm({
-            title: 'Publicación de prueba',
-            description: ' ',
-        });
-
-        await publishPublicationFormPage.submitForm();
-
+        // Then an error message should be displayed
         const isMessageDisplayed = await alertSnackBarPage.verifyMessage('Parámetros incorrectos');
         assert.strictEqual(isMessageDisplayed, true, 'El mensaje de error no fue mostrado correctamente');
     });

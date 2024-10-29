@@ -23,9 +23,12 @@ async function extractTestScenarios(directory) {
 
                 while ((match = scenarioRegex.exec(content)) !== null) {
                     const tags = extractTags(match.input);
+                    const id = extractID(match.input);
+                    const cleanedScenario = cleanScenario(match[1]);
                     scenarios.push({
+                        id: id,
                         file: entry.name,
-                        scenario: match[1],
+                        scenario: cleanedScenario,
                         tags: tags
                     });
                 }
@@ -45,10 +48,16 @@ async function extractTestScenarios(directory) {
         return Array.from(tags); // Convert back to array
     }
 
-    function cleanScenario(scenario) {
-        return scenario.replace(/\[Tag: [^\]]+\]/g, '').trim();
+    function extractID(scenarioLine) {
+        const idRegex = /TC-\d+: /; // Match IDs like "TC-47: "
+        const match = idRegex.exec(scenarioLine);
+        return match ? match[0].slice(0, -2) : "No ID found"; // Extract ID without the colon and space
     }
-    
+
+    function cleanScenario(scenario) {
+        const cleanRegex = /TC-\d+: /; // Remove ID from scenario
+        return scenario.replace(cleanRegex, '').trim(); // Clean scenario description
+    }
 
     await traverseDirectory(directory);
     return scenarios;

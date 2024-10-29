@@ -21,6 +21,18 @@ h1, h2, h3 {
   color: #5e6c84;
 }
 
+.header-with-button {
+  display: flex;
+  justify-content: space-between; /* Aligns items on opposite ends (left and right) */
+  align-items: center; /* Align items vertically in the center */
+  padding: 20px; /* Optional: Adjust based on your design preferences */
+  background-color: #ebecf0; /* Optional: Matches the section styling */
+}
+
+h2 {
+  margin: 0; /* Removes default margin to align title properly */
+}
+
 /* Header Styles */
 header {
   background-color: hsl(202, 93%, 89%);
@@ -57,8 +69,12 @@ form {
 }
 
 .btn-primary {
+  padding: 10px 20px;
   background-color: #5aac44;
   color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .btn-primary:hover {
@@ -169,4 +185,100 @@ legend {
   margin-bottom: 10px; /* Adds space below the legend */
   color: #333; /* Sets the text color */
   font-weight: bold; /* Makes the legend text bold */
+}
+
+/* LIST */
+
+body {
+  font-family: Arial, sans-serif; /* Use a modern font-family */
+  background-color: #f4f4f4; /* Light gray background for better contrast */
+  color: #333; /* Dark gray text for better readability */
+  padding: 20px; /* Add padding around the content for spacing */
+}
+
+table {
+  width: 100%; /* Full-width to maximize space */
+  border-collapse: collapse; /* Ensures borders between cells are merged */
+  margin-top: 20px; /* Space above the table */
+}
+
+th, td {
+  text-align: left; /* Align text to the left */
+  padding: 12px; /* Ample padding in cells for content separation */
+  border-bottom: 1px solid #ccc; /* Light gray border for each row */
+}
+
+th {
+  background-color: #e9e9e9; /* Slightly darker background for header */
+  font-weight: normal; /* Avoid bold headers */
+}
+
+tr:hover {
+  background-color: #f9f9f9; /* Highlight rows on hover for better interaction feedback */
+}
+
+input[type="checkbox"] {
+  margin-right: 10px; /* Space between checkbox and label text */
+}
+
+ /* Specific column widths */
+ .select-col {
+  width: 5%; /* Narrow column for checkboxes */
+}
+
+.id-col {
+  width: 10%; /* Width for ID column */
+}
+
+.title-col {
+  width: 85%; /* Maximum width for Title to utilize space */
+}
+
+/* control panel*/
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.container-buttons {
+  margin-bottom: 10px;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content label {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.btn-primary {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+legend {
+  padding: 0 5px;
+  font-size: 16px;
 }
