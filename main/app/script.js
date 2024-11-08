@@ -422,3 +422,17 @@ function searchById() {
   document.getElementById('total-cases-shown').textContent = filteredScenarios.length.toString();
 }
 document.getElementById('search-button').addEventListener('click', searchById);
+
+document.getElementById('run-selected-tests').addEventListener('click', () => {
+  const selectedTestCases = Array.from(document.querySelectorAll('#test-case-list input[type="checkbox"]:checked'))
+    .map(checkbox => checkbox.closest('tr').children[1].textContent); // Assume the ID is in the second cell
+
+  const idsRegex = selectedTestCases.map(id => `\\b${id}\\b`).join('|');
+  const customCommand = `npm run test:ids -- --grep="${idsRegex}"`;
+
+  ipcRenderer.send('run-custom-tests', customCommand);
+});
+
+document.getElementById('view-selected-ids-report').addEventListener('click', () => {
+  ipcRenderer.send('generate-report-ids');
+});

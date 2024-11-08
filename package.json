@@ -6,7 +6,7 @@
   "scripts": {
     "test:ui": "rd /s /q reports\\ui\\allure-results && mocha --experimental-modules 'tests/ui/**/*.spec.js' --reporter mocha-allure-reporter --reporter-options targetDir=reports/ui/allure-results",
     "generate-report:ui": "allure generate reports/ui/allure-results --clean -o reports/ui/allure-report && allure open reports/ui/allure-report",
-    "test:api": "rd /s /q reports\\api\\allure-results && mocha --require @babel/register 'tests/api/user/*.js' --reporter mocha-allure-reporter --reporter-options targetDir=reports/api/allure-results",
+    "test:api": "rd /s /q reports\\api\\allure-results && mocha --require @babel/register 'tests/api/**/*.js' --reporter mocha-allure-reporter --reporter-options targetDir=reports/api/allure-results",
     "generate-report:api": "allure generate reports/api/allure-results --clean -o reports/api/allure-report && allure open reports/api/allure-report",
     "test:ids": "npx mocha \"tests/**/*.js\" --reporter mocha-allure-reporter --reporter-options targetDir=reports/ids/allure-results",
     "generate-report:ids": "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report",

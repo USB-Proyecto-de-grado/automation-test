@@ -151,18 +151,7 @@ function openReportWindow(reportPath) {
   });
   reportWin.loadURL(`file://${reportPath}`);
   reportWin.on('closed', () => reportWin = null);
-}
-
-ipcMain.on('run-custom-tests', (event, customCommand) => {
-  apiTestProcess = exec(customCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error running custom API tests: ${error.message}`);
-      event.sender.send('test-output', `Error running custom API tests: ${error.message}`);
-      return;
-    }
-    event.sender.send('test-output', stdout || stderr);
-  });
-});
+};
 
 
 ipcMain.on('view-custom-report', (event) => {
@@ -302,4 +291,26 @@ ipcMain.on('load-folders', (event, type) => {
     .map(dirent => dirent.name);
 
   event.sender.send('folders-loaded', { type, folders });
+});
+
+ipcMain.on('run-custom-tests', (event, customCommand) => {
+  const testProcess = exec(customCommand, (error, stdout, stderr) => {
+    if (error) {
+      event.sender.send('test-output', `Error running tests: ${error.message}`);
+      return;
+    }
+    event.sender.send('test-output', stdout || stderr);
+  });
+});
+
+ipcMain.on('generate-report-ids', async (event) => {
+  const command = "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report";
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error generating report for selected IDs: ${error.message}`);
+      event.sender.send('report-error', `Error generating report for selected IDs: ${error.message}`);
+      return;
+    }
+    event.sender.send('report-generated', 'Report for selected IDs generated and opened.');
+  });
 });
