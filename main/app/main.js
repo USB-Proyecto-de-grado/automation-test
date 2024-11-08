@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell  } = require('electron');
 const { extractTestScenarios, watchTestDirectories } = require('./extractTestCases');
 const chokidar = require('chokidar');
 const { exec } = require('child_process');
@@ -189,46 +189,91 @@ ipcMain.on('load-folders', (event, type) => {
 });
 
 // Handle creating a new test case
-ipcMain.on('create-test-case', (event, testCaseData) => {
+ipcMain.on('create-test-case', async (event, testCaseData) => {
   try {
     const { testType, testCaseId, testName, description, tags, featureName, featureType } = testCaseData;
 
-    // Determine the correct base path based on test type
-    const basePath = testType === 'api' ? 'tests/api/' : 'tests/ui/';
+    const basePath = testType === 'api' ? 'tests\\api' : 'tests\\ui';
     const folderPath = path.join(basePath, featureName);
 
-    // If it's a new feature, create the folder
     if (featureType === 'new' && !fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
     }
 
-    // Generate the test case filename (e.g., TC-47.spec.js)
     const fileName = `TC-${testCaseId}.spec.js`;
     const filePath = path.join(folderPath, fileName);
-
-    // Generate tags string for the test case file
     const tagsString = tags.map(tag => `[Tag: ${tag}]`).join(' ');
 
-    // Content of the test case file
-    const fileContent = `
+    let fileContent;
+
+    if (testType === 'api') {
+      fileContent = `
         const supertest = require('supertest');
         const expect = require('chai').expect;
         const config = require('../../../config');
         const request = supertest(config.apiUrl);
 
         describe('${testName}', () => {
-
             it('TC-${testCaseId}: ${description} ${tagsString}', async () => {
                 // Test logic goes here
             });
         });
-    `;
+      `;
+    } else { // Assume UI if not API
+      fileContent = `
+        const { Builder, By, until } = require('selenium-webdriver');
+        const buildDriver = require('../../../main/core/driverSetUp');
+        const config = require('../../../config');
+        const assert = require('assert');
+        const chai = require('chai');
+        const expect = chai.expect;
+        const HomePage = require('../../../page-objects/home/homePage');
+        const VideoPlayerPage = require('../../../page-objects/common/videoPlayerPage');
+        const { takeScreenshot } = require('../../../utils/screenshotUtils');
+        const addContext = require('mochawesome/addContext');
 
-    // Write content to the test case file
+        describe('Feature Tests for ${testName}', function() {
+            this.timeout(50000);
+            let driver;
+            let homePage;
+            let videoPlayerPage;
+
+            beforeEach(async function() {
+                driver = buildDriver();
+                homePage = new HomePage(driver);
+                videoPlayerPage = new VideoPlayerPage(driver);
+                await driver.get(config.uiUrl);
+            });
+
+            afterEach(async function() {
+                if (this.currentTest.state === 'failed') {
+                    const screenshotPath = await takeScreenshot(driver, this.currentTest.title);
+                    addContext(this, {
+                      title: 'Screenshot',
+                      value: screenshotPath
+                    });
+                };
+                await driver.quit();
+            });
+
+            it('TC-${testCaseId}: ${description} ${tagsString}', async function() {
+                // Test logic goes here
+            });
+        });
+      `;
+    }
+
     fs.writeFileSync(filePath, fileContent, 'utf8');
 
-    // Send confirmation back to the renderer process
-    event.sender.send('test-case-created', `Test case file ${fileName} created successfully in ${featureName} folder!`);
+    // Open the file in the default code editor
+    exec(`code "${filePath}"`, (error) => {
+      if (error) {
+        console.error('Failed to open file:', error);
+        event.sender.send('test-case-created', `Error opening file: ${error.message}`);
+      } else {
+        event.sender.send('test-case-created', `Test case file ${fileName} created and opened successfully.`);
+      }
+    });
   } catch (error) {
     console.error('Error creating test case file:', error);
     event.sender.send('test-case-created', 'Error creating test case file.');

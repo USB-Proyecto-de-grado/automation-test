@@ -30,7 +30,7 @@ describe('Music API Test - POST Requests [Tag: API Testing]', () => {
         const response = await request.post('/music')
                                       .send(music)
                                       .set('Accept', 'application/json');
-
+        addCreatedMusicId(response.body.id);
         // Then: Expect a failure response with status 400 due to the invalid URL
         expect(response.status).to.equal(400);
         expect(response.body).to.have.property('error');

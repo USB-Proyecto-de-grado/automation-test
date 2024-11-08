@@ -87,29 +87,31 @@
         </form>
       </div>
     </div>
-
-
-    <!-- Encabezado y checkboxes para la selección de tipo de prueba -->
-    <h1>Test Case Viewer</h1>
-    <div id="test-type-checkboxes" class="checkbox-grid">
-      <label><input type="checkbox" value="all" class="test-type"> All</label>
-      <label><input type="checkbox" value="API Testing" class="test-type"> API Testing</label>
-      <label><input type="checkbox" value="GUI Testing" class="test-type"> GUI Testing</label>
-      <label><input type="checkbox" value="Smoke Testing" class="test-type"> Smoke Testing</label>
-      <label><input type="checkbox" value="Functional Testing" class="test-type"> Functional Testing</label>
-      <label><input type="checkbox" value="Acceptance Testing" class="test-type"> Acceptance Testing</label>
-      <label><input type="checkbox" value="Negative Testing" class="test-type"> Negative Testing</label>
-      <label><input type="checkbox" value="Non-Functional Testing" class="test-type"> Non-Functional Testing</label>
-      <label><input type="checkbox" value="Bug" class="test-type"> Bug</label>
-    </div>
     <p>Total Cases Shown: <span id="total-cases-shown">0</span></p>
+    <p>Total Cases Selected: <span id="total-cases-selected">0</span></p>
 
     <!-- ID Filter Input -->
     <section id="test-case-viewer">
       <div class="header-with-button">
         <h2>Test Case List</h2>
+        <button id="show-filters" class="btn-primary">Filters</button>
+        <button id="show-selected-tests" class="btn-primary">Show Selected</button>
         <button id="add-test-case" class="btn-primary">Add Test Case</button>
       </div>
+
+      <div id="filter-section" class="checkbox-section" style="display: none;">
+        <!-- Place all your existing filter checkboxes here -->
+        <label><input type="checkbox" value="all" class="test-type"> All</label>
+        <label><input type="checkbox" value="API Testing" class="test-type"> API Testing</label>
+        <label><input type="checkbox" value="GUI Testing" class="test-type"> GUI Testing</label>
+        <label><input type="checkbox" value="Smoke Testing" class="test-type"> Smoke Testing</label>
+        <label><input type="checkbox" value="Functional Testing" class="test-type"> Functional Testing</label>
+        <label><input type="checkbox" value="Acceptance Testing" class="test-type"> Acceptance Testing</label>
+        <label><input type="checkbox" value="Negative Testing" class="test-type"> Negative Testing</label>
+        <label><input type="checkbox" value="Non-Functional Testing" class="test-type"> Non-Functional Testing</label>
+        <label><input type="checkbox" value="Bug" class="test-type"> Bug</label>
+      </div>
+
       <table class="fixed-layout">
         <thead>
           <tr>

@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:ui": "mocha  --experimental-modules 'tests/ui/**/*.spec.js'  --reporter mochawesome --reporter-options reportDir=reports/ui,reportFilename=uiReport,charts=true",
-    "test:api": "mocha 'tests/api/**/*.js' --reporter mochawesome --reporter-options reportDir=reports/api,reportFilename=apiReport,charts=true",
-    "test:custom": "mocha 'tests/**/*.js' --grep \"\\[Tag: YourCustomTag\\]\"  --reporter mochawesome --reporter-options reportDir=reports/custom,reportFilename=customReport,overwrite=false,charts=true",
-    "test:ids": "mocha 'tests/**/*.js' --grep $npm_config_ids --reporter mochawesome --reporter-options reportDir=reports/custom,reportFilename=customReport,overwrite=false,charts=true",
+    "test:ui": "rd /s /q reports\\ui\\allure-results && mocha --experimental-modules 'tests/ui/**/*.spec.js' --reporter mocha-allure-reporter --reporter-options targetDir=reports/ui/allure-results",
+    "generate-report:ui": "allure generate reports/ui/allure-results --clean -o reports/ui/allure-report && allure open reports/ui/allure-report",
+    "test:api": "rd /s /q reports\\api\\allure-results && mocha --require @babel/register 'tests/api/user/*.js' --reporter mocha-allure-reporter --reporter-options targetDir=reports/api/allure-results",
+    "generate-report:api": "allure generate reports/api/allure-results --clean -o reports/api/allure-report && allure open reports/api/allure-report",
+    "test:ids": "npx mocha \"tests/**/*.js\" --reporter mocha-allure-reporter --reporter-options targetDir=reports/ids/allure-results",
+    "generate-report:ids": "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report",
     "test": "npm run test:ui && npm run test:api",
     "start-gui": "electron main/app/main.js"
   },
@@ -15,9 +17,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/register": "^7.25.9",
+    "allure-commandline": "^2.32.0",
     "chai": "^4.5.0",
+    "cross-env": "^7.0.3",
     "electron": "^33.0.2",
     "mocha": "^9.2.2",
+    "mocha-allure-reporter": "^1.4.0",
+    "mocha-rp-reporter": "^1.0.12",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",
     "mochawesome-report-generator": "^6.2.0",
@@ -27,6 +35,7 @@
     "chokidar": "^4.0.1",
     "chromedriver": "^128.0.1",
     "geckodriver": "^4.5.1",
+    "reportportal-client": "^5.5.0",
     "selenium-webdriver": "^4.24.0"
   }
 }

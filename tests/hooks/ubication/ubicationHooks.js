@@ -32,7 +32,6 @@ const deleteUbications = async () => {
             const response = await request.delete(`/ubication/${ubicationId}`)
                                           .set('Accept', 'application/json')
                                           .expect(200)
-            console.log('Ubication deleted with ID:', ubicationId);
         } catch (error) {
             console.error('Error deleting ubication with ID:', ubicationId, error);
         }

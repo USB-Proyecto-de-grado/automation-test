@@ -111,6 +111,14 @@ document.querySelectorAll('.test-type').forEach(checkbox => {
   });
 });
 
+
+//filter
+document.getElementById('show-filters').addEventListener('click', function() {
+  var filterSection = document.getElementById('filter-section');
+  filterSection.style.display = filterSection.style.display === 'none' ? 'block' : 'none'; // Toggle visibility
+});
+
+
 // Store all scenarios globally for filtering
 let allScenarios = [];
 

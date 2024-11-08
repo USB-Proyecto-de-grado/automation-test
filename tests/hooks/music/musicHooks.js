@@ -47,7 +47,6 @@ const createMusicEntries = async (numEntries = 1) => {
 };
 
 const deleteMusicEntries = async () => {
-    console.log(createdMusicIds)
     for (const musicId of createdMusicIds) {
         await request.delete(`/music/${musicId}`)
                      .set('Accept', 'application/json')
