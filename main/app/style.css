@@ -303,3 +303,77 @@ legend {
   margin: 5px 20px; /* Provide some margin around labels */
   font-size: 16px; /* Increase font size for readability */
 }
+
+
+/*  SRACHHH* /
+/* Search Container Styling */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px; /* Adds space below the search bar */
+}
+
+.search-container label {
+  font-weight: bold;
+  color: #333;
+}
+
+#search-id {
+  padding: 8px;
+  width: 200px; /* Set width as needed */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#search-id:focus {
+  border-color: #4a90e2;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(74, 144, 226, 0.6);
+}
+
+/* Container for search and buttons */
+.search-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px; /* Space below the container */
+  background-color: #ebecf0;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+#search-id {
+  padding: 8px;
+  width: 85%; /* Adjusts based on the container width */
+  max-width: 1200px; /* Optional: Set a max-width for larger screens */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#search-id:focus {
+  border-color: #4a90e2;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(74, 144, 226, 0.6);
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #519839;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}

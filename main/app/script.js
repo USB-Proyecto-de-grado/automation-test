@@ -141,27 +141,74 @@ function displayTestCases() {
 
   filteredScenarios.forEach(scenario => {
     const row = document.createElement('tr');
-    
+
     const cellSelect = document.createElement('td');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
+    checkbox.checked = selectedCases.includes(scenario.id); // Retain selected state
+    checkbox.addEventListener('change', () => handleSelectionChange(scenario.id, checkbox.checked));
     cellSelect.appendChild(checkbox);
-    
+
     const cellId = document.createElement('td');
     cellId.textContent = scenario.id;
-    
+
     const cellTitle = document.createElement('td');
     cellTitle.textContent = scenario.scenario;
-    
+
     row.appendChild(cellSelect);
     row.appendChild(cellId);
     row.appendChild(cellTitle);
-    
+
     listElement.appendChild(row);
   });
 
   document.getElementById('total-cases-shown').textContent = filteredScenarios.length.toString();
 }
+
+function handleSelectionChange(caseId, isSelected) {
+  if (isSelected && !selectedCases.includes(caseId)) {
+    selectedCases.push(caseId);
+  } else if (!isSelected) {
+    selectedCases = selectedCases.filter(id => id !== caseId);
+  }
+  document.getElementById('total-cases-selected').textContent = selectedCases.length;
+}
+
+function showSelectedCases() {
+  const listElement = document.getElementById('test-case-list');
+  listElement.innerHTML = ''; // Clear the table before displaying selected cases
+
+  const selectedScenarios = allScenarios.filter(scenario => selectedCases.includes(scenario.id));
+
+  selectedScenarios.forEach(scenario => {
+    const row = document.createElement('tr');
+
+    const cellSelect = document.createElement('td');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = true; // All are selected since we are showing selected cases
+    checkbox.addEventListener('change', () => handleSelectionChange(scenario.id, checkbox.checked));
+    cellSelect.appendChild(checkbox);
+
+    const cellId = document.createElement('td');
+    cellId.textContent = scenario.id;
+
+    const cellTitle = document.createElement('td');
+    cellTitle.textContent = scenario.scenario;
+
+    row.appendChild(cellSelect);
+    row.appendChild(cellId);
+    row.appendChild(cellTitle);
+
+    listElement.appendChild(row);
+  });
+
+  document.getElementById('total-cases-shown').textContent = selectedScenarios.length.toString();
+}
+
+// Event listener for 'Show Selected' button
+document.getElementById('show-selected-tests').addEventListener('click', showSelectedCases);
+
 
 // Get values of all checked checkboxes except 'All'
 function getSelectedTags() {
@@ -333,3 +380,45 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+
+let selectedCases = [];
+
+function searchById() {
+  const searchId = document.getElementById('search-id').value.trim();
+  const listElement = document.getElementById('test-case-list');
+  listElement.innerHTML = ''; // Clear the table before displaying search results
+
+  if (searchId === '') {
+    displayTestCases(); // Show all cases if search is empty
+    return;
+  }
+
+  const filteredScenarios = allScenarios.filter(scenario => scenario.id.toString() === searchId);
+
+  filteredScenarios.forEach(scenario => {
+    const row = document.createElement('tr');
+
+    const cellSelect = document.createElement('td');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = selectedCases.includes(scenario.id);
+    checkbox.addEventListener('change', () => handleSelectionChange(scenario.id, checkbox.checked));
+    cellSelect.appendChild(checkbox);
+
+    const cellId = document.createElement('td');
+    cellId.textContent = scenario.id;
+
+    const cellTitle = document.createElement('td');
+    cellTitle.textContent = scenario.scenario;
+
+    row.appendChild(cellSelect);
+    row.appendChild(cellId);
+    row.appendChild(cellTitle);
+
+    listElement.appendChild(row);
+  });
+
+  document.getElementById('total-cases-shown').textContent = filteredScenarios.length.toString();
+}
+document.getElementById('search-button').addEventListener('click', searchById);

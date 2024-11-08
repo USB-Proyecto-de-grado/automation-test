@@ -87,9 +87,12 @@
         </form>
       </div>
     </div>
-    <p>Total Cases Shown: <span id="total-cases-shown">0</span></p>
-    <p>Total Cases Selected: <span id="total-cases-selected">0</span></p>
-
+    <p>Selected Cases: <span id="total-cases-selected">0</span></p>
+    <p>Shown Cases: <span id="total-cases-shown">0</span></p>
+    <div class="search-container">
+      <input type="text" id="search-id" placeholder="Enter Test Case ID" />
+      <button id="search-button" class="btn-primary">Search</button>
+    </div>
     <!-- ID Filter Input -->
     <section id="test-case-viewer">
       <div class="header-with-button">
@@ -98,7 +101,7 @@
         <button id="show-selected-tests" class="btn-primary">Show Selected</button>
         <button id="add-test-case" class="btn-primary">Add Test Case</button>
       </div>
-
+      
       <div id="filter-section" class="checkbox-section" style="display: none;">
         <!-- Place all your existing filter checkboxes here -->
         <label><input type="checkbox" value="all" class="test-type"> All</label>
