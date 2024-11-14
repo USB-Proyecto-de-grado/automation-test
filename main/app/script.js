@@ -3,76 +3,7 @@ const { shell } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-// Ejecutar los tests de UI
-document.getElementById('run-ui-tests').addEventListener('click', () => {
-  ipcRenderer.send('run-ui-tests');
-});
-
-// Ejecutar los tests de API
-document.getElementById('run-api-tests').addEventListener('click', () => {
-  ipcRenderer.send('run-api-tests');
-});
-
-// Ver el último reporte de UI
-document.getElementById('view-ui-report').addEventListener('click', () => {
-  ipcRenderer.send('view-ui-report');
-});
-
-// Ver el último reporte de API
-document.getElementById('view-api-report').addEventListener('click', () => {
-  ipcRenderer.send('view-api-report');
-});
-
-ipcRenderer.on('load-report', (event, reportPath) => {
-  const iframe = document.getElementById('report-frame');
-  console.log("Ruta del reporte:", reportPath);
-  if (reportPath) {
-    iframe.src = reportPath;
-  } else {
-    document.getElementById('test-output').textContent = 'No report found.';
-  }
-});
-
-document.getElementById('open-test-plan').addEventListener('click', () => {
-  shell.openPath('C:/Users/carolina.zegarra/Desktop/proyecto de grado/automation-test/reports/testplan/Test Plan.pdf')
-      .then(() => console.log('Documento abierto exitosamente'))
-      .catch(err => console.error('Error al abrir el documento:', err));
-});
-
-document.getElementById('run-custom-tests').addEventListener('click', () => {
-  const selectedTag = document.getElementById('custom-test-selector').value;
-  const customCommand = `npm run test:custom -- --grep "\\[Tag: ${selectedTag}\\]" --reporter mochawesome --reporter-options reportDir=reports/custom,reportFilename=customReport,overwrite=false,charts=true`;
-  ipcRenderer.send('run-custom-tests', customCommand);  // Ensure to modify the backend to handle this
-});
-
-
-document.getElementById('view-custom-report').addEventListener('click', () => {
-  ipcRenderer.send('view-custom-report');
-});
-
-
-function populateCustomTestDropdown() {
-  const uniqueTags = new Set();
-
-  allScenarios.forEach(scenario => {
-      scenario.tags.forEach(tag => uniqueTags.add(tag));
-  });
-
-  const dropdown = document.getElementById('custom-test-selector');
-  dropdown.innerHTML = ''; // Clear existing options
-
-  uniqueTags.forEach(tag => {
-      const option = document.createElement('option');
-      option.value = tag;
-      option.textContent = tag;
-      dropdown.appendChild(option);
-  });
-}
-
 // TEST
-
-document.addEventListener('DOMContentLoaded', populateCustomTestDropdown);
-
 document.querySelectorAll('.test-type').forEach(checkbox => {
   checkbox.addEventListener('change', handleCheckboxChange);
 });
@@ -435,4 +366,44 @@ document.getElementById('run-selected-tests').addEventListener('click', () => {
 
 document.getElementById('view-selected-ids-report').addEventListener('click', () => {
   ipcRenderer.send('generate-report-ids');
+});
+
+document.getElementById('clear-reports').addEventListener('click', () => {
+  ipcRenderer.send('clear-reports');
+});
+
+ipcRenderer.on('reports-cleared', (event, message) => {
+  console.log(message); // or display this message in the UI
+});
+
+ipcRenderer.on('report-clear-error', (event, error) => {
+  console.error(error); // or display this error in the UI
+});
+
+document.getElementById('run-ui-tests').addEventListener('click', () => {
+  ipcRenderer.send('run-ui-tests');
+});
+
+document.getElementById('run-api-tests').addEventListener('click', () => {
+  ipcRenderer.send('run-api-tests');
+});
+
+document.getElementById('generate-ui-report').addEventListener('click', () => {
+  ipcRenderer.send('generate-ui-report');
+});
+
+document.getElementById('generate-api-report').addEventListener('click', () => {
+  ipcRenderer.send('generate-api-report');
+});
+
+document.getElementById('clear-ui-reports').addEventListener('click', () => {
+  ipcRenderer.send('clear-ui-reports');
+});
+
+document.getElementById('clear-api-reports').addEventListener('click', () => {
+  ipcRenderer.send('clear-api-reports');
+});
+
+ipcRenderer.on('clear-reports-result', (event, message) => {
+  alert(message); // Or display this message in a status area in your UI
 });

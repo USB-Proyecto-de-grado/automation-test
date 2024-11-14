@@ -13,7 +13,7 @@
     <header>
       <h1>Automation Test Runner</h1>
     </header>
-
+    
     <!-- Modal for Creating a Test Case -->
     <div id="add-test-case-modal" class="modal">
       <div class="modal-content">
@@ -87,8 +87,14 @@
         </form>
       </div>
     </div>
-    <p>Selected Cases: <span id="total-cases-selected">0</span></p>
-    <p>Shown Cases: <span id="total-cases-shown">0</span></p>
+    <div class="cases-info">
+      <div class="cases-info-item">
+        <p>Selected Cases: <span id="total-cases-selected">0</span></p>
+      </div>
+      <div class="cases-info-item">
+        <p>Shown Cases: <span id="total-cases-shown">0</span></p>
+      </div>
+    </div>   
     <div class="search-container">
       <input type="text" id="search-id" placeholder="Enter Test Case ID" />
       <button id="search-button" class="btn-primary">Search</button>
@@ -99,7 +105,7 @@
         <h2>Test Case List</h2>
         <button id="show-filters" class="btn-primary">Filters</button>
         <button id="show-selected-tests" class="btn-primary">Show Selected</button>
-        <button id="run-selected-tests" class="btn-primary">Execute Selected Test Cases</button>
+        
         <button id="add-test-case" class="btn-primary">Add Test Case</button>
       </div>
       
@@ -130,49 +136,26 @@
       </table>
     </section>
 
-
-    <section id="controls">
-      <h2>Control Panel</h2>
-      <div class="button-group">
-        <div class="container-buttons">
-          <button id="run-ui-tests" class="btn-primary">Run UI Tests</button>
-          <button id="run-api-tests" class="btn-primary">Run API Tests</button>
-          <button id="open-test-plan" class="btn-primary">Open Test Plan</button>
-          <button id="run-custom-tests" class="btn-primary">Run Custom Tests</button>
-          <select id="custom-test-selector">
-            <option value="all">All Tests</option>
-            <!-- Dynamic options will be added here via script.js -->
-          </select>
-
-        </div>
-      </div>
-    </section>
-
     <section id="reports">
       <h2>Generated Reports</h2>
       <div class="report-section">
         <h3>Test Cases Selected Reports</h3>
-
+        <button id="run-selected-tests" class="btn-primary">Execute Selected Test Cases</button>
         <button id="view-selected-ids-report" class="btn-report">View Selected IDs Report</button>
-      </div>
-      <div class="report-section">
-        <h3>Custom Reports</h3>
-
-        <button id="view-custom-report" class="btn-report">View Custom Report</button>
+        <button id="clear-reports" class="btn-report">Clear Reports</button>
       </div>
       <div class="report-section">
         <h3>UI Reports</h3>
-        <button id="view-ui-report" class="btn-report">View UI Report</button>
+        <button id="run-ui-tests" class="btn-primary">Run UI Tests</button>
+        <button id="generate-ui-report" class="btn-report">Generate UI Report</button>
+        <button id="clear-ui-reports" class="btn-report">Clear UI Reports</button>
       </div>
       <div class="report-section">
         <h3>API Reports</h3>
-        <button id="view-api-report" class="btn-report">View API Report</button>
+        <button id="run-api-tests" class="btn-primary">Run API Tests</button>
+        <button id="generate-api-report" class="btn-report">Generate API Report</button>
+        <button id="clear-api-reports" class="btn-report">Clear API Reports</button>
       </div>
-    </section>
-
-    <section id="report-viewer">
-      <h2>Report Viewer</h2>
-      <iframe id="report-frame" src="" width="100%" height="400px"></iframe>
     </section>
   </div>
 

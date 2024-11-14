@@ -377,3 +377,31 @@ legend {
   background-color: #519839;
   box-shadow: 0 2px 3px rgba(0,0,0,0.1);
 }
+
+/* Styling for the Selected and Shown Cases Section */
+.cases-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f4f6f8;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cases-info-item {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.cases-info-item p {
+  margin: 0;
+}
+
+.cases-info-item span {
+  color: #5aac44;
+  font-size: 18px;
+}
+

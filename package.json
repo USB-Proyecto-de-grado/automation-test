@@ -11,7 +11,8 @@
     "test:ids": "npx mocha \"tests/**/*.js\" --reporter mocha-allure-reporter --reporter-options targetDir=reports/ids/allure-results",
     "generate-report:ids": "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report",
     "test": "npm run test:ui && npm run test:api",
-    "start-gui": "electron main/app/main.js"
+    "start": "electron --no-sandbox main/app/main.js",
+    "start-gui": "electron --no-sandbox --disable-gpu --disable-software-rasterizer main/app/main.js"
   },
   "keywords": [],
   "author": "",

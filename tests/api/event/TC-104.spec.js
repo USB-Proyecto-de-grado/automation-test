@@ -35,7 +35,7 @@ describe('Event API Test - POST Requests [Tag: API Testing]', () => {
         const response = await request.post('/event')
                                       .send(event)
                                       .set('Accept', 'application/json');
-
+        addCreatedEventId(response.body.id);
         // Then: Expect a failure due to the negative cost value, with status 404 and appropriate error message
         expect(response.status).to.equal(404);
         expect(response.body).to.have.property('error', 'Not Found');

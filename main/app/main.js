@@ -6,7 +6,6 @@ const path = require('path');
 const fs = require('fs');
 const testsDirectory = path.join(__dirname, '../../tests');
 
-
 let win;
 let uiTestProcess = null;   // Para almacenar el proceso de los tests de UI
 let apiTestProcess = null;  // Para almacenar el proceso de los tests de API
@@ -32,6 +31,13 @@ function createWindow() {
       updateTestCases();
       setupFileWatcher();
   });
+
+    // Espera a que el servidor Express esté listo y luego carga la URL
+    mainWindow.loadURL(`http://localhost:${PORT}`);
+
+    mainWindow.on('closed', function () {
+      mainWindow = null;
+    });
 }
 
 function setupFileWatcher() {
@@ -61,84 +67,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.on('open-pdf', (event, pdfPath) => {
-  let pdfWin = new BrowserWindow({
-      width: 800,
-      height: 600,
-      webPreferences: {
-          plugins: true
-      }
-  });
-
-  pdfWin.loadURL(`file://${pdfPath}`);
-  pdfWin.on('closed', () => pdfWin = null);
-});
-
-async function takeScreenshot(driver, testName) {
-  const screenshotDir = path.join(__dirname, '../reports/ui/screenshots');
-  if (!fs.existsSync(screenshotDir)) {
-    fs.mkdirSync(screenshotDir, { recursive: true });
-  }
-  const screenshotPath = path.join(screenshotDir, `${testName}.png`);
-  const image = await driver.takeScreenshot();
-  fs.writeFileSync(screenshotPath, image, 'base64');
-  console.log(`Screenshot saved to ${screenshotPath}`);
-}
-
-// Función para obtener el último archivo HTML en un directorio
-function getLatestReport(directory) {
-    const files = fs.readdirSync(directory);
-    const htmlFiles = files.filter(file => file.endsWith('.html'));
-    if (htmlFiles.length === 0) return null;
-  
-    // Ordenar archivos por fecha de modificación
-    const sortedFiles = htmlFiles
-      .map(file => ({
-        file,
-        time: fs.statSync(path.join(directory, file)).mtime.getTime()
-      }))
-      .sort((a, b) => b.time - a.time);
-  
-    return path.join(directory, sortedFiles[0].file);
-}
-
-// Ejecutar los tests de UI
-ipcMain.on('run-ui-tests', (event) => {
-  uiTestProcess = exec('npm run test:ui', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error al ejecutar test UI: ${error.message}`);
-      event.sender.send('test-output', `Error al ejecutar test UI: ${error.message}`);
-      return;
-    }
-    event.sender.send('test-output', stdout || stderr);
-  });
-});
-
-// Ejecutar los tests de API
-ipcMain.on('run-api-tests', (event) => {
-  apiTestProcess = exec('npm run test:api', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error al ejecutar test API: ${error.message}`);
-      event.sender.send('test-output', `Error al ejecutar test API: ${error.message}`);
-      return;
-    }
-    event.sender.send('test-output', stdout || stderr);
-  });
-});
-
-// Cargar el reporte más reciente de UI
-ipcMain.on('view-ui-report', (event) => {
-  const uiReportPath = getLatestReport(path.join(__dirname, '../../reports/ui'));
-  console.log("Mostrando reporte UI:", uiReportPath);
-  event.sender.send('load-report', uiReportPath ? `file://${uiReportPath}` : null);
-});
-
-// Cargar el reporte más reciente de API
-ipcMain.on('view-api-report', (event) => {
-  const apiReportPath = getLatestReport(path.join(__dirname, '../../reports/api'));
-  console.log("Mostrando reporte API:", apiReportPath);
-  event.sender.send('load-report', apiReportPath ? `file://${apiReportPath}` : null);
-});
 
 function openReportWindow(reportPath) {
   let reportWin = new BrowserWindow({
@@ -153,29 +81,6 @@ function openReportWindow(reportPath) {
   reportWin.on('closed', () => reportWin = null);
 };
 
-
-ipcMain.on('view-custom-report', (event) => {
-  const customReportPath = getLatestReport(path.join(__dirname, '../../reports/custom'));
-  console.log("Displaying custom report:", customReportPath);
-  event.sender.send('load-report', customReportPath ? `file://${customReportPath}` : null);
-});
-
-// Handle folder loading request
-ipcMain.on('load-folders', (event, type) => {
-  const folderPath = type === 'api' ? 'tests/api/' : 'tests/ui/';
-  
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });
-  }
-
-  // Read the folders in the specified directory
-  const folders = fs.readdirSync(folderPath, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
-
-  // Send the folders back to the renderer process
-  event.sender.send('folders-loaded', { type, folders });
-});
 
 // Handle creating a new test case
 ipcMain.on('create-test-case', async (event, testCaseData) => {
@@ -312,5 +217,94 @@ ipcMain.on('generate-report-ids', async (event) => {
       return;
     }
     event.sender.send('report-generated', 'Report for selected IDs generated and opened.');
+  });
+});
+
+ipcMain.on('clear-reports', async (event) => {
+  const reportsDir = path.join(__dirname, '../../reports/ids/allure-results');
+  fs.rm(reportsDir, { recursive: true, force: true }, (err) => {
+    if (err) {
+      console.error(`Error clearing reports: ${err.message}`);
+      event.sender.send('report-clear-error', `Error clearing reports: ${err.message}`);
+      return;
+    }
+    fs.mkdirSync(reportsDir); // Recreate the directory after clearing
+    event.sender.send('reports-cleared', 'Reports directory cleared successfully.');
+  });
+});
+
+// Handle running UI tests
+ipcMain.on('run-ui-tests', (event) => {
+  exec('npm run test:ui', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error running UI tests: ${error}`);
+      event.reply('execution-error', 'Failed to run UI tests');
+      return;
+    }
+    event.reply('execution-success', 'UI tests run successfully');
+  });
+});
+
+// Handle running API tests
+ipcMain.on('run-api-tests', (event) => {
+  exec('npm run test:api', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error running API tests: ${error}`);
+      event.reply('execution-error', 'Failed to run API tests');
+      return;
+    }
+    event.reply('execution-success', 'API tests run successfully');
+  });
+});
+
+// Handle generating UI report
+ipcMain.on('generate-ui-report', (event) => {
+  exec('npm run generate-report:ui', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error generating UI report: ${error}`);
+      event.reply('execution-error', 'Failed to generate UI report');
+      return;
+    }
+    event.reply('execution-success', 'UI report generated successfully');
+  });
+});
+
+// Handle generating API report
+ipcMain.on('generate-api-report', (event) => {
+  exec('npm run generate-report:api', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error generating API report: ${error}`);
+      event.reply('execution-error', 'Failed to generate API report');
+      return;
+    }
+    event.reply('execution-success', 'API report generated successfully');
+  });
+});
+
+// Clear UI Reports
+ipcMain.on('clear-ui-reports', (event) => {
+  const uiReportsDir = path.join(__dirname, '../../reports/ui/allure-results');
+  fs.rm(uiReportsDir, { recursive: true, force: true }, (err) => {
+    if (err) {
+      console.error(`Error clearing UI reports: ${err}`);
+      event.reply('clear-reports-result', 'Failed to clear UI reports');
+      return;
+    }
+    fs.mkdirSync(uiReportsDir); // Recreate the directory after clearing
+    event.reply('clear-reports-result', 'UI reports cleared successfully');
+  });
+});
+
+// Clear API Reports
+ipcMain.on('clear-api-reports', (event) => {
+  const apiReportsDir = path.join(__dirname, '../../reports/api/allure-results');
+  fs.rm(apiReportsDir, { recursive: true, force: true }, (err) => {
+    if (err) {
+      console.error(`Error clearing API reports: ${err}`);
+      event.reply('clear-reports-result', 'Failed to clear API reports');
+      return;
+    }
+    fs.mkdirSync(apiReportsDir); // Recreate the directory after clearing
+    event.reply('clear-reports-result', 'API reports cleared successfully');
   });
 });
