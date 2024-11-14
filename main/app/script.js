@@ -316,16 +316,21 @@ window.onclick = function(event) {
 let selectedCases = [];
 
 function searchById() {
-  const searchId = document.getElementById('search-id').value.trim();
+  const searchQuery = document.getElementById('search-id').value.trim().toLowerCase();
   const listElement = document.getElementById('test-case-list');
   listElement.innerHTML = ''; // Clear the table before displaying search results
 
-  if (searchId === '') {
+  if (searchQuery === '') {
     displayTestCases(); // Show all cases if search is empty
     return;
   }
 
-  const filteredScenarios = allScenarios.filter(scenario => scenario.id.toString() === searchId);
+  const filteredScenarios = allScenarios.filter(scenario => {
+    const idMatch = scenario.id.toString().toLowerCase().includes(searchQuery);
+    const titleMatch = scenario.scenario && scenario.scenario.toLowerCase().includes(searchQuery);
+    const nameMatch = scenario.name && scenario.name.toLowerCase().includes(searchQuery);
+    return idMatch || titleMatch || nameMatch;
+  });
 
   filteredScenarios.forEach(scenario => {
     const row = document.createElement('tr');
@@ -352,6 +357,7 @@ function searchById() {
 
   document.getElementById('total-cases-shown').textContent = filteredScenarios.length.toString();
 }
+
 document.getElementById('search-button').addEventListener('click', searchById);
 
 document.getElementById('run-selected-tests').addEventListener('click', () => {
