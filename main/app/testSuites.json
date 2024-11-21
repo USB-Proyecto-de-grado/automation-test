@@ -1,7 +1,7 @@
 [
   {
-    "name": "test 1",
-    "description": "haha",
+    "name": "TEST1",
+    "description": "ASD",
     "testCases": [
       "TC-100",
       "TC-101",

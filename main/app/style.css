@@ -416,11 +416,6 @@ legend {
   border-radius: 5px;
 }
 
-#test-case-selection-list {
-  list-style: none;
-  padding-left: 0;
-}
-
 #test-case-selection-list li {
   padding: 5px;
   border-bottom: 1px solid #e9e9e9;
@@ -429,3 +424,39 @@ legend {
 #test-case-selection-list li:last-child {
   border-bottom: none;
 }
+
+#test-suites-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+#test-suites-list li .suite-info {
+  font-weight: bold;
+}
+
+.btn-delete {
+  background-color: #d9534f;
+}
+
+.btn-delete:hover {
+  background-color: #c9302c;
+}
+
+.btn-primary, .btn-delete {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  margin-left: 10px;
+}
+
+.btn-primary:hover, .btn-delete:hover {
+  opacity: 0.85;
+}
+

@@ -510,13 +510,47 @@ function saveTestSuites() {
 }
 
 function displayTestSuites() {
-    const listElement = document.getElementById('test-suites-list');
-    listElement.innerHTML = '';
-    testSuites.forEach(suite => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${suite.name}: ${suite.description} (Cases: ${suite.testCases.join(', ')})`;
-        listElement.appendChild(listItem);
-    });
+  const listElement = document.getElementById('test-suites-list');
+  listElement.innerHTML = '';
+  testSuites.forEach((suite, index) => {
+      const listItem = document.createElement('li');
+      
+      // Div for suite info
+      const suiteInfo = document.createElement('div');
+      suiteInfo.className = 'suite-info';
+      suiteInfo.textContent = `${suite.name}: ${suite.description}`;
+
+      // Create Delete button
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.className = 'btn-delete';  // Specific class for the delete button
+      deleteButton.onclick = function() { deleteTestSuite(index); };
+      
+      // Create Show More button
+      const showMoreButton = document.createElement('button');
+      showMoreButton.textContent = 'Show More';
+      showMoreButton.className = 'btn-primary';
+      showMoreButton.onclick = function() { showTestSuiteDetails(suite); };
+
+      // Container for buttons
+      const buttonContainer = document.createElement('div');
+      buttonContainer.appendChild(deleteButton);
+      buttonContainer.appendChild(showMoreButton);
+
+      listItem.appendChild(suiteInfo);
+      listItem.appendChild(buttonContainer);
+      listElement.appendChild(listItem);
+  });
+}
+
+function deleteTestSuite(index) {
+  testSuites.splice(index, 1);
+  saveTestSuites(); // Re-save the updated list to JSON
+  displayTestSuites(); // Refresh the display
+}
+
+function showTestSuiteDetails(suite) {
+  alert(`Details for ${suite.name}:\nDescription: ${suite.description}`);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
