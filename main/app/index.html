@@ -13,6 +13,46 @@
     <header>
       <h1>Automation Test Runner</h1>
     </header>
+
+<!-- Section for Test Suites -->
+<section id="test-suites-section">
+  <div class="header-with-button">
+    <h2>Manage Test Suites</h2>
+  <button id="add-test-suite" class="btn-primary">Add Test Suite</button>
+  </div>
+  <!-- Modal for Creating a Test Suite -->
+  <div id="add-test-suite-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Create a Test Suite</h2>
+      <form id="test-suite-form">
+        <div class="form-row">
+          <label for="suite-name">Test Suite Name:</label>
+          <input type="text" id="suite-name" name="suite-name" required>
+        </div>
+        <div class="form-row">
+          <label for="suite-description">Description:</label>
+          <textarea id="suite-description" name="suite-description" required></textarea>
+        </div>
+        <div class="form-row">
+          <label for="search-test-case">Search Test Case:</label>
+          <input type="text" id="search-test-case" oninput="searchTestCases()" placeholder="Search by ID or name">
+        </div>
+              <!-- Agregar estilo de desplazamiento para los test cases -->
+      <div class="form-row" style="height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 5px;">
+        <ul id="test-case-selection-list"></ul>
+      </div>
+        <button type="submit" class="btn-primary">Create Test Suite</button>
+      </form>
+    </div>
+  </div>
+  
+  <ul id="test-suites-list">
+    <!-- Test Suites will be listed here -->
+  </ul>
+</section>
+
+
     
     <!-- Modal for Creating a Test Case -->
     <div id="add-test-case-modal" class="modal">

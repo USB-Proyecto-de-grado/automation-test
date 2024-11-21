@@ -1,9 +1,10 @@
 [
   {
-    "name": "ASD",
+    "name": "test 1",
+    "description": "haha",
     "testCases": [
-      "TC-101",
       "TC-100",
+      "TC-101",
       "TC-102"
     ]
   }

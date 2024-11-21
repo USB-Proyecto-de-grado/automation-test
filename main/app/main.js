@@ -32,12 +32,6 @@ function createWindow() {
       setupFileWatcher();
   });
 
-    // Espera a que el servidor Express esté listo y luego carga la URL
-    mainWindow.loadURL(`http://localhost:${PORT}`);
-
-    mainWindow.on('closed', function () {
-      mainWindow = null;
-    });
 }
 
 function setupFileWatcher() {
@@ -308,3 +302,4 @@ ipcMain.on('clear-api-reports', (event) => {
     event.reply('clear-reports-result', 'API reports cleared successfully');
   });
 });
+

@@ -131,7 +131,7 @@ form {
   margin: 5% auto;
   padding: 20px;
   border: none;
-  width: 40%; /* Adjust based on your preference */
+  width: 60%; /* Adjust based on your preference */
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
@@ -405,3 +405,27 @@ legend {
   font-size: 18px;
 }
 
+#test-suites-list, #test-case-selection-list {
+  list-style: none;
+  padding: 0;
+}
+#test-suites-list li, #test-case-selection-list li {
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+}
+
+#test-case-selection-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+#test-case-selection-list li {
+  padding: 5px;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#test-case-selection-list li:last-child {
+  border-bottom: none;
+}

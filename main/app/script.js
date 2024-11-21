@@ -413,3 +413,123 @@ document.getElementById('clear-api-reports').addEventListener('click', () => {
 ipcRenderer.on('clear-reports-result', (event, message) => {
   alert(message); // Or display this message in a status area in your UI
 });
+
+// Global array to hold test suites
+let testSuites = [];
+let selectedCasesForSuite = {};
+
+// Load test cases when the modal is opened
+function loadTestCases() {
+    const listElement = document.getElementById('test-case-selection-list');
+    listElement.innerHTML = '';
+    allScenarios.forEach(scenario => {
+        const listItem = document.createElement('li');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.setAttribute('data-id', scenario.id);
+        checkbox.checked = selectedCasesForSuite[scenario.id] || false;
+        checkbox.onchange = function() {
+            selectedCasesForSuite[scenario.id] = this.checked;
+        };
+        listItem.appendChild(checkbox);
+        listItem.append(` ID: ${scenario.id}, Name: ${scenario.scenario}`);
+        listElement.appendChild(listItem);
+    });
+}
+
+// Specific search for the test suite modal
+function searchTestCasesForSuite() {
+    const searchQuery = document.getElementById('search-test-case').value.toLowerCase();
+    const listElement = document.getElementById('test-case-selection-list');
+    listElement.innerHTML = '';
+    allScenarios.filter(scenario => scenario.id.toLowerCase().includes(searchQuery) || scenario.scenario.toLowerCase().includes(searchQuery))
+        .forEach(scenario => {
+            const listItem = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.setAttribute('data-id', scenario.id);
+            checkbox.checked = selectedCasesForSuite[scenario.id] || false;
+            checkbox.onchange = function() {
+                selectedCasesForSuite[scenario.id] = this.checked;
+            };
+            listItem.appendChild(checkbox);
+            listItem.append(` ID: ${scenario.id}, Name: ${scenario.scenario}`);
+            listElement.appendChild(listItem);
+        });
+}
+
+document.getElementById('search-test-case').addEventListener('input', searchTestCasesForSuite);
+
+// Function to close modal and reset selection
+function closeModal() {
+    document.getElementById('add-test-suite-modal').style.display = 'none';
+}
+
+document.getElementById('add-test-suite').addEventListener('click', function() {
+    document.getElementById('add-test-suite-modal').style.display = 'block';
+    loadTestCases(); // Load test cases when opening the modal
+});
+
+document.getElementById('test-suite-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const suiteName = document.getElementById('suite-name').value.trim();
+    const suiteDescription = document.getElementById('suite-description').value.trim();
+    
+    if (!suiteName || !suiteDescription) {
+        alert('Both name and description are required.');
+        return;
+    }
+
+    const selectedCases = Object.keys(selectedCasesForSuite).filter(key => selectedCasesForSuite[key]);
+
+    const newSuite = {
+        name: suiteName,
+        description: suiteDescription,
+        testCases: selectedCases
+    };
+    testSuites.push(newSuite);
+    saveTestSuites();
+    displayTestSuites();
+    closeModal();
+    selectedCasesForSuite = {}; // Reset after closing modal
+});
+
+document.getElementsByClassName('close')[0].onclick = closeModal;
+window.onclick = function(event) {
+    if (event.target === document.getElementById('add-test-suite-modal')) {
+        closeModal();
+    }
+};
+
+function saveTestSuites() {
+    fs.writeFile(path.join(__dirname, 'testSuites.json'), JSON.stringify(testSuites, null, 2), 'utf-8', (err) => {
+        if (err) {
+            console.error('Failed to save test suites:', err);
+        }
+    });
+}
+
+function displayTestSuites() {
+    const listElement = document.getElementById('test-suites-list');
+    listElement.innerHTML = '';
+    testSuites.forEach(suite => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${suite.name}: ${suite.description} (Cases: ${suite.testCases.join(', ')})`;
+        listElement.appendChild(listItem);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadTestSuites();
+});
+
+function loadTestSuites() {
+    fs.readFile(path.join(__dirname, 'testSuites.json'), 'utf-8', (err, data) => {
+        if (err) {
+            console.error('Error loading test suites:', err);
+            return;
+        }
+        testSuites = JSON.parse(data);
+        displayTestSuites();
+    });
+}
