@@ -4,6 +4,14 @@ const chokidar = require('chokidar');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+
+// Set BASE_PATH environment variable
+process.env.BASE_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, '../../../main/app')
+    : __dirname;
+
+console.log('Base Path:', process.env.BASE_PATH);
+
 const testsDirectory = path.join(__dirname, '../../tests');
 
 let win;
@@ -19,7 +27,7 @@ function createWindow() {
       }
   });
 
-  win.loadFile(path.join(__dirname, 'index.html'));
+  win.loadFile(path.join(process.env.BASE_PATH, 'index.html'));
 
   if (process.env.NODE_ENV === 'development') {
       win.webContents.openDevTools();
@@ -76,83 +84,97 @@ function openReportWindow(reportPath) {
 
 
 // Handle creating a new test case
+process.env.PROJECT_ROOT = path.resolve(app.getAppPath(), '../../../..');
+console.log('Project Root set to:', process.env.PROJECT_ROOT);
+
 ipcMain.on('create-test-case', async (event, testCaseData) => {
   try {
     const { testType, testCaseId, testName, description, tags, featureName, featureType } = testCaseData;
 
-    const basePath = testType === 'api' ? 'tests\\api' : 'tests\\ui';
+    // Define the directory for test files based on the test type
+    const testsDirectory = path.join(process.env.PROJECT_ROOT, 'tests');
+    const basePath = testType === 'api' ? path.join(testsDirectory, 'api') : path.join(testsDirectory, 'ui');
     const folderPath = path.join(basePath, featureName);
 
+    // Log the folder path to diagnose path issues
+    console.log('Attempting to create/access directory at:', folderPath);
+
+    // Create the directory if it does not exist
     if (featureType === 'new' && !fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
+      console.log('Directory created:', folderPath);
     }
 
+    // Generate the filename and path
     const fileName = `TC-${testCaseId}.spec.js`;
     const filePath = path.join(folderPath, fileName);
-    const tagsString = tags.map(tag => `[Tag: ${tag}]`).join(' ');
+    console.log('File Path:', filePath);
 
-    let fileContent;
-
-    if (testType === 'api') {
-      fileContent = `
-        const supertest = require('supertest');
-        const expect = require('chai').expect;
-        const config = require('../../../config');
-        const request = supertest(config.apiUrl);
-
-        describe('${testName} [Tag: API Testing]', () => {
-
-            it('TC-${testCaseId}: ${description}', async () => {
-                expect(true).to.equal(true); // This will always pass
-            });
-
-        });
-      `;
-    } else { // Assume UI if not API
-      fileContent = `
-        const { Builder, By, until } = require('selenium-webdriver');
-        const assert = require('assert');
-        const chai = require('chai');
-        const expect = chai.expect;
-        const config = require('../../../config');
-
-        describe('${testName} [Tag: GUI Testing]', function() {
-            this.timeout(30000);
-            let driver;
-
-            beforeEach(async function() {
-                driver = new Builder().forBrowser('chrome').build();
-                await driver.get(config.uiUrl);
-            });
-
-            afterEach(async function() {
-                await driver.quit();
-            });
-
-            it('TC-${testCaseId}: ${description} [Tag: Functional Testing]', async function() {
-                expect(true).to.be.true; // Always true, test will always pass
-            });
-
-        });
-      `;
-    }
-
+    // Generate file content based on test type
+    const fileContent = generateFileContent(testType, testCaseId, testName, description, tags);
     fs.writeFileSync(filePath, fileContent, 'utf8');
+    console.log('File written successfully at:', filePath);
 
-    // Open the file in the default code editor
+    // Attempt to open the file in the default code editor
     exec(`code "${filePath}"`, (error) => {
       if (error) {
         console.error('Failed to open file:', error);
         event.sender.send('test-case-created', `Error opening file: ${error.message}`);
       } else {
         event.sender.send('test-case-created', `Test case file ${fileName} created and opened successfully.`);
+        console.log('File opened in editor:', filePath);
       }
     });
   } catch (error) {
     console.error('Error creating test case file:', error);
-    event.sender.send('test-case-created', 'Error creating test case file.');
+    event.sender.send('test-case-created', `Error creating test case file: ${error.message}`);
   }
 });
+
+function generateFileContent(testType, testCaseId, testName, description, tags) {
+  // Example content generation logic
+  const tagsString = tags.map(tag => `[Tag: ${tag}]`).join(' ');
+  if (testType === 'api') {
+    return `
+      const supertest = require('supertest');
+      const expect = require('chai').expect;
+      const config = require('../../../config');
+      const request = supertest(config.apiUrl);
+
+      describe('${testName} ${tagsString}', () => {
+          it('TC-${testCaseId}: ${description}', async () => {
+              expect(true).to.equal(true); // Placeholder test
+          });
+      });
+    `;
+  } else {
+    return `
+      const { Builder, By, Key, until } = require('selenium-webdriver');
+      const assert = require('assert');
+      const chai = require('chai');
+      const expect = chai.expect;
+      const config = require('../../../config');
+
+      describe('${testName} ${tagsString}', function() {
+          this.timeout(30000);
+          let driver;
+
+          beforeEach(async function() {
+              driver = new Builder().forBrowser('chrome').build();
+              await driver.get(config.uiUrl);
+          });
+
+          afterEach(async function() {
+              await driver.quit();
+          });
+
+          it('TC-${testCaseId}: ${description}', async function() {
+              expect(true).to.be.true; // Placeholder test
+          });
+      });
+    `;
+  }
+}
 
 // Initialize by sending the current test cases
 updateTestCases();
@@ -200,7 +222,7 @@ ipcMain.on('generate-report-ids', async (event) => {
 });
 
 ipcMain.on('clear-reports', async (event) => {
-  const reportsDir = path.join(__dirname, '../../reports/ids/allure-results');
+  const reportsDir = path.join(process.env.BASE_PATH, '../../reports/ids/allure-results');
   fs.rm(reportsDir, { recursive: true, force: true }, (err) => {
     if (err) {
       console.error(`Error clearing reports: ${err.message}`);
@@ -264,7 +286,7 @@ ipcMain.on('generate-api-report', (event) => {
 
 // Clear UI Reports
 ipcMain.on('clear-ui-reports', (event) => {
-  const uiReportsDir = path.join(__dirname, '../../reports/ui/allure-results');
+  const uiReportsDir = path.join(process.env.BASE_PATH, '../../reports/ui/allure-results');
   fs.rm(uiReportsDir, { recursive: true, force: true }, (err) => {
     if (err) {
       console.error(`Error clearing UI reports: ${err}`);
@@ -278,7 +300,7 @@ ipcMain.on('clear-ui-reports', (event) => {
 
 // Clear API Reports
 ipcMain.on('clear-api-reports', (event) => {
-  const apiReportsDir = path.join(__dirname, '../../reports/api/allure-results');
+  const apiReportsDir = path.join(process.env.BASE_PATH, '../../reports/api/allure-results');
   fs.rm(apiReportsDir, { recursive: true, force: true }, (err) => {
     if (err) {
       console.error(`Error clearing API reports: ${err}`);
@@ -291,8 +313,8 @@ ipcMain.on('clear-api-reports', (event) => {
 });
 
 const allowedDirs = [
-  path.join(__dirname, '../../tests', 'api'),
-  path.join(__dirname, '../../tests', 'ui')
+  path.join(process.env.BASE_PATH, '../../tests', 'api'),
+  path.join(process.env.BASE_PATH, '../../tests', 'ui')
 ];
 
 // Function to recursively scan directories
@@ -316,7 +338,7 @@ function scanDirectory(dir, callback) {
 // Function to check file placement
 // Function to check file placement and update UI accordingly
 function checkTestFilePlacement(window) {
-  const testRoot = path.join(__dirname, '../../tests');
+  const testRoot = path.join(process.env.BASE_PATH, '../../tests');
   let misplacedFileFound = false;
 
   scanDirectory(testRoot, (filePath, dir) => {

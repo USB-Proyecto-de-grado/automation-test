@@ -2,7 +2,9 @@
   "name": "automation-test",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main/app/main.js",
+  "author": "Carolina Zegarra",
+  "license": "MIT",
   "scripts": {
     "test:ui": "rd /s /q reports\\ui\\allure-results && mocha --experimental-modules 'tests/ui/**/*.spec.js' --reporter mocha-allure-reporter --reporter-options targetDir=reports/ui/allure-results",
     "generate-report:ui": "allure generate reports/ui/allure-results --clean -o reports/ui/allure-report && allure open reports/ui/allure-report",
@@ -12,11 +14,10 @@
     "generate-report:ids": "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report",
     "test": "npm run test:ui && npm run test:api",
     "start": "electron --no-sandbox main/app/main.js",
-    "start-gui": "electron --no-sandbox --disable-gpu --disable-software-rasterizer main/app/main.js"
+    "start-gui": "electron --no-sandbox --disable-gpu --disable-software-rasterizer main/app/main.js",
+    "dist": "electron-builder"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/register": "^7.25.9",
@@ -24,6 +25,7 @@
     "chai": "^4.5.0",
     "cross-env": "^7.0.3",
     "electron": "^33.0.2",
+    "electron-builder": "^25.1.8",
     "mocha": "^9.2.2",
     "mocha-allure-reporter": "^1.4.0",
     "mocha-rp-reporter": "^1.0.12",
@@ -38,5 +40,18 @@
     "geckodriver": "^4.5.1",
     "reportportal-client": "^5.5.0",
     "selenium-webdriver": "^4.24.0"
+  },
+  "build": {
+    "asar": true,
+    "appId": "com.pg.app",
+    "productName": "automation-test electron",
+    "directories": {
+      "output": "build"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
   }
+
 }

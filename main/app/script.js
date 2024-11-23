@@ -538,7 +538,7 @@ function addNewSuite() {
 }
 
 function saveTestSuites() {
-    const filePath = path.join(__dirname, 'testSuites.json');
+    const filePath = path.join(__dirname, '.../../testSuites.json');
     const data = JSON.stringify(testSuites, null, 2);
     return fs.promises.writeFile(filePath, data, 'utf-8')
         .then(() => console.log('Test suites saved successfully.'))
@@ -546,7 +546,7 @@ function saveTestSuites() {
 }
 
 function loadTestSuites() {
-    fs.readFile(path.join(__dirname, 'testSuites.json'), 'utf-8', (err, data) => {
+    fs.readFile(path.join(__dirname, '../../main/app/testSuites.json'), 'utf-8', (err, data) => {
         if (err) {
             console.error('Error loading test suites:', err);
             return;
@@ -655,7 +655,7 @@ function saveEditedTestSuite() {
 
 // Función para guardar todos los test suites en el archivo JSON
 function saveEditedTestSuites() {
-  const filePath = path.join(__dirname, 'testSuites.json');
+  const filePath = path.join(__dirname, '../../main/app/testSuites.json');
   const data = JSON.stringify(testSuites, null, 2);
   console.log("Saving to file:", filePath, "Data:", data);
   return fs.promises.writeFile(filePath, data, 'utf-8')
