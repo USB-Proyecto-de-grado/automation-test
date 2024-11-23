@@ -327,20 +327,52 @@ function scanDirectory(dir, callback) {
 }
 
 // Function to check file placement
+// Function to check file placement and update UI accordingly
 function checkTestFilePlacement(window) {
-  const testRoot = path.join(__dirname, '../../tests'); // Adjust the path as needed
+  const testRoot = path.join(__dirname, '../../tests');
+  let misplacedFileFound = false;
+
   scanDirectory(testRoot, (filePath, dir) => {
     if (filePath.endsWith('.spec.js')) {
-      const isAllowed = allowedDirs.some(allowedDir => filePath.startsWith(allowedDir) && path.dirname(filePath) !== allowedDir);
+      const isAllowed = allowedDirs.some(allowedDir => filePath.startsWith(allowedDir));
       if (!isAllowed) {
         console.log('Misplaced test file found:', filePath);
-        window.webContents.send('misplaced-test-file', filePath);
+        misplacedFileFound = true;
+        if (window && window.webContents) {
+          window.webContents.send('misplaced-test-file', filePath);
+        }
       }
+    }
+  }).then(() => {
+    if (!misplacedFileFound && window && window.webContents) {
+      window.webContents.send('all-files-correct');
     }
   });
 }
+
+// Adjustments for the scanDirectory function to return a promise for better control
+async function scanDirectory(dir, callback) {
+  try {
+    const dirents = await fs.promises.readdir(dir, { withFileTypes: true });
+    for (const dirent of dirents) {
+      const res = path.resolve(dir, dirent.name);
+      if (dirent.isDirectory()) {
+        await scanDirectory(res, callback);
+      } else {
+        callback(res, dir);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to read directory:', err);
+  }
+}
+
 
 ipcMain.on('check-file-placement', (event) => {
   const window = event.sender;
   checkTestFilePlacement(window);
 });
+
+watcher.on('add', () => checkTestFilePlacement(win))
+       .on('change', () => checkTestFilePlacement(win))
+       .on('unlink', () => checkTestFilePlacement(win));

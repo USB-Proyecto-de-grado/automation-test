@@ -694,3 +694,38 @@ ipcRenderer.on('misplaced-test-file', (event, filePath) => {
   showErrorModal(message);
 });
 
+function showErrorModal(message, filePath) {
+  const modal = document.getElementById('error-modal');
+  const errorMessage = document.getElementById('error-message');
+  errorMessage.textContent = message;
+  modal.style.display = 'block';
+
+  // Show and update notification bar with file path
+  const notificationBar = document.getElementById('notification-bar');
+  const notificationMessage = document.getElementById('notification-message');
+  notificationMessage.textContent = `Misplaced test file: ${filePath}. Please relocate it to continue, if you already move it please refresh.`;
+  notificationBar.classList.remove('hidden');
+  notificationBar.classList.add('visible');
+
+  // Disable test execution buttons
+  toggleButtons(true);
+}
+
+function toggleButtons(disable) {
+  const buttons = document.querySelectorAll('.btn-primary, .btn-report, .btn-delete');
+  buttons.forEach(button => {
+    button.disabled = disable;
+  });
+}
+
+// Reset functionality if the file is moved to the correct location or after fixing the issue
+function resetNotificationAndButtons() {
+  const notificationBar = document.getElementById('notification-bar');
+  notificationBar.classList.add('hidden');
+  toggleButtons(false);
+}
+
+ipcRenderer.on('all-files-correct', () => {
+  resetNotificationAndButtons();
+});
+
