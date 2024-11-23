@@ -100,52 +100,39 @@ ipcMain.on('create-test-case', async (event, testCaseData) => {
         const config = require('../../../config');
         const request = supertest(config.apiUrl);
 
-        describe('${testName}', () => {
-            it('TC-${testCaseId}: ${description} ${tagsString}', async () => {
-                // Test logic goes here
+        describe('${testName} [Tag: API Testing]', () => {
+
+            it('TC-${testCaseId}: ${description}', async () => {
+                expect(true).to.equal(true); // This will always pass
             });
+
         });
       `;
     } else { // Assume UI if not API
       fileContent = `
         const { Builder, By, until } = require('selenium-webdriver');
-        const buildDriver = require('../../../main/core/driverSetUp');
-        const config = require('../../../config');
         const assert = require('assert');
         const chai = require('chai');
         const expect = chai.expect;
-        const HomePage = require('../../../page-objects/home/homePage');
-        const VideoPlayerPage = require('../../../page-objects/common/videoPlayerPage');
-        const { takeScreenshot } = require('../../../utils/screenshotUtils');
-        const addContext = require('mochawesome/addContext');
+        const config = require('../../../config');
 
-        describe('Feature Tests for ${testName}', function() {
-            this.timeout(50000);
+        describe('${testName} [Tag: GUI Testing]', function() {
+            this.timeout(30000);
             let driver;
-            let homePage;
-            let videoPlayerPage;
 
             beforeEach(async function() {
-                driver = buildDriver();
-                homePage = new HomePage(driver);
-                videoPlayerPage = new VideoPlayerPage(driver);
+                driver = new Builder().forBrowser('chrome').build();
                 await driver.get(config.uiUrl);
             });
 
             afterEach(async function() {
-                if (this.currentTest.state === 'failed') {
-                    const screenshotPath = await takeScreenshot(driver, this.currentTest.title);
-                    addContext(this, {
-                      title: 'Screenshot',
-                      value: screenshotPath
-                    });
-                };
                 await driver.quit();
             });
 
-            it('TC-${testCaseId}: ${description} ${tagsString}', async function() {
-                // Test logic goes here
+            it('TC-${testCaseId}: ${description} [Tag: Functional Testing]', async function() {
+                expect(true).to.be.true; // Always true, test will always pass
             });
+
         });
       `;
     }
