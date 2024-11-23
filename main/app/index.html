@@ -52,6 +52,56 @@
   </ul>
 </section>
 
+<!-- Modal for Editing a Test Suite -->
+<div id="edit-test-suite-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Edit Test Suite</h2>
+    <form id="edit-test-suite-form">
+      <div class="form-row">
+        <label for="edit-suite-name">Test Suite Name:</label>
+        <input type="text" id="edit-suite-name" required>
+      </div>
+      <div class="form-row">
+        <label for="edit-suite-description">Description:</label>
+        <textarea id="edit-suite-description" required></textarea>
+      </div>
+      <div class="form-row">
+        <input type="text" id="edit-search-test-case" placeholder="Search test cases..." oninput="filterEditTestCases()">
+      </div>
+      <div class="form-row">
+        <h3>Selected Test Cases:</h3>
+        <table id="selected-test-cases-list">
+          <thead>
+            <tr>
+              <th>ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Selected test cases will be listed here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="form-row">
+        <h3>All Test Cases:</h3>
+        <table id="edit-test-case-selection-list">
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>ID</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Test cases will be listed here -->
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+  </div>
+</div>
+
 
     
     <!-- Modal for Creating a Test Case -->
