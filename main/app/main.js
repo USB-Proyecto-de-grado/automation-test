@@ -193,14 +193,13 @@ ipcMain.on('load-folders', (event, type) => {
 });
 
 ipcMain.on('run-custom-tests', (event, customCommand) => {
-  const testProcess = exec(customCommand, (error, stdout, stderr) => {
-    if (error) {
-      event.sender.send('test-output', `Error running tests: ${error.message}`);
-      return;
-    }
-    event.sender.send('test-output', stdout || stderr);
+  exec(customCommand, (error, stdout, stderr) => {
+    event.sender.send('test-output', error ? `Error running tests: ${error.message}` : stdout || stderr);
+    console.log('Test process completed, notifying renderer'); // Debug log
+    event.sender.send('test-complete'); // Notify that the tests are complete, regardless of outcome
   });
 });
+
 
 ipcMain.on('generate-report-ids', async (event) => {
   const command = "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report";
@@ -233,9 +232,10 @@ ipcMain.on('run-ui-tests', (event) => {
     if (error) {
       console.error(`Error running UI tests: ${error}`);
       event.reply('execution-error', 'Failed to run UI tests');
-      return;
+    } else {
+      event.reply('execution-success', 'UI tests run successfully');
     }
-    event.reply('execution-success', 'UI tests run successfully');
+    event.reply('ui-test-complete'); // Notificar al renderizador que la prueba UI ha terminado
   });
 });
 
@@ -245,9 +245,10 @@ ipcMain.on('run-api-tests', (event) => {
     if (error) {
       console.error(`Error running API tests: ${error}`);
       event.reply('execution-error', 'Failed to run API tests');
-      return;
+    } else {
+      event.reply('execution-success', 'API tests run successfully');
     }
-    event.reply('execution-success', 'API tests run successfully');
+    event.reply('api-test-complete'); // Notificar al renderizador que la prueba API ha terminado
   });
 });
 

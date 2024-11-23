@@ -460,3 +460,27 @@ legend {
   opacity: 0.85;
 }
 
+
+button:disabled {
+  background-color: #ccc; /* Light grey color indicating disabled state */
+  color: #666; /* Darker text color for better contrast */
+  cursor: not-allowed; /* Cursor to indicate the button cannot be clicked */
+  opacity: 0.5; /* Make the button look faded to indicate it is inactive */
+  animation: none; /* Remove animations if any */
+}
+
+button {
+  transition: background-color 0.3s ease; /* Smooth transition for background color change */
+  /* Your existing button styles */
+  background-color: blue; /* Normal state color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Ensure there are no hover effects for disabled button */
+button:disabled:hover {
+  background-color: #ccc; /* Keep the background color the same as the disabled state */
+}

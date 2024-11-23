@@ -360,15 +360,46 @@ function searchById() {
 
 document.getElementById('search-button').addEventListener('click', searchById);
 
+function toggleButtons(disabled) {
+  document.getElementById('run-ui-tests').disabled = disabled;
+  document.getElementById('run-api-tests').disabled = disabled;
+  document.getElementById('run-selected-tests').disabled = disabled;
+}
+
 document.getElementById('run-selected-tests').addEventListener('click', () => {
+  toggleButtons(true); // Desactivar todos los botones al iniciar las pruebas
+
   const selectedTestCases = Array.from(document.querySelectorAll('#test-case-list input[type="checkbox"]:checked'))
-    .map(checkbox => checkbox.closest('tr').children[1].textContent); // Assume the ID is in the second cell
+    .map(checkbox => checkbox.closest('tr').children[1].textContent);
 
   const idsRegex = selectedTestCases.map(id => `\\b${id}\\b`).join('|');
   const customCommand = `npm run test:ids -- --grep="${idsRegex}"`;
 
   ipcRenderer.send('run-custom-tests', customCommand);
+
+  ipcRenderer.once('test-complete', () => {
+    toggleButtons(false); // Reactivar todos los botones cuando la prueba termine
+  });
 });
+
+document.getElementById('run-ui-tests').addEventListener('click', () => {
+  toggleButtons(true); // Desactivar todos los botones
+  ipcRenderer.send('run-ui-tests');
+
+  ipcRenderer.once('ui-test-complete', () => {
+    toggleButtons(false); // Reactivar todos los botones
+  });
+});
+
+document.getElementById('run-api-tests').addEventListener('click', () => {
+  toggleButtons(true); // Desactivar todos los botones
+  ipcRenderer.send('run-api-tests');
+
+  ipcRenderer.once('api-test-complete', () => {
+    toggleButtons(false); // Reactivar todos los botones
+  });
+});
+
 
 document.getElementById('view-selected-ids-report').addEventListener('click', () => {
   ipcRenderer.send('generate-report-ids');
@@ -384,14 +415,6 @@ ipcRenderer.on('reports-cleared', (event, message) => {
 
 ipcRenderer.on('report-clear-error', (event, error) => {
   console.error(error); // or display this error in the UI
-});
-
-document.getElementById('run-ui-tests').addEventListener('click', () => {
-  ipcRenderer.send('run-ui-tests');
-});
-
-document.getElementById('run-api-tests').addEventListener('click', () => {
-  ipcRenderer.send('run-api-tests');
 });
 
 document.getElementById('generate-ui-report').addEventListener('click', () => {
