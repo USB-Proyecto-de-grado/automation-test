@@ -60,40 +60,48 @@ ipcRenderer.on('test-cases-updated', (event, scenarios) => {
   displayTestCases();
 });
 
-// Function to display test cases based on selected tags
+document.getElementById('clear-selected-tests').addEventListener('click', () => {
+  selectedCases = []; // Clear the array holding selected cases
+  document.getElementById('total-cases-selected').textContent = '0'; // Update the displayed count
+  displayTestCases(); // Refresh the display to show changes
+});
+
 function displayTestCases() {
   const selectedTags = getSelectedTags();
   const listElement = document.getElementById('test-case-list');
   listElement.innerHTML = ''; // Clear the table before updating
 
   const filteredScenarios = allScenarios.filter(scenario => {
-    return document.querySelector('.test-type[value="all"]').checked || scenario.tags.some(tag => selectedTags.includes(tag));
+      return document.querySelector('.test-type[value="all"]').checked || scenario.tags.some(tag => selectedTags.includes(tag));
   });
 
   filteredScenarios.forEach(scenario => {
-    const row = document.createElement('tr');
+      const row = document.createElement('tr');
+      const cellSelect = document.createElement('td');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = selectedCases.includes(scenario.id);
+      checkbox.addEventListener('change', () => handleSelectionChange(scenario.id, checkbox.checked));
+      cellSelect.appendChild(checkbox);
 
-    const cellSelect = document.createElement('td');
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.checked = selectedCases.includes(scenario.id); // Retain selected state
-    checkbox.addEventListener('change', () => handleSelectionChange(scenario.id, checkbox.checked));
-    cellSelect.appendChild(checkbox);
+      const cellId = document.createElement('td');
+      cellId.textContent = scenario.id;
 
-    const cellId = document.createElement('td');
-    cellId.textContent = scenario.id;
+      const cellTitle = document.createElement('td');
+      cellTitle.textContent = scenario.scenario;
 
-    const cellTitle = document.createElement('td');
-    cellTitle.textContent = scenario.scenario;
+      row.appendChild(cellSelect);
+      row.appendChild(cellId);
+      row.appendChild(cellTitle);
 
-    row.appendChild(cellSelect);
-    row.appendChild(cellId);
-    row.appendChild(cellTitle);
-
-    listElement.appendChild(row);
+      listElement.appendChild(row);
   });
 
   document.getElementById('total-cases-shown').textContent = filteredScenarios.length.toString();
+}
+
+function getSelectedTags() {
+  return Array.from(document.querySelectorAll('.test-type:checked:not([value="all"])')).map(checkbox => checkbox.value);
 }
 
 function handleSelectionChange(caseId, isSelected) {
@@ -553,28 +561,58 @@ function loadTestSuites() {
 }
 
 function displayTestSuites() {
-    const listElement = document.getElementById('test-suites-list');
-    listElement.innerHTML = '';
-    testSuites.forEach((suite, index) => {
-        const listItem = document.createElement('li');
-        const suiteInfo = document.createElement('div');
-        suiteInfo.className = 'suite-info';
-        suiteInfo.textContent = `${suite.name}: ${suite.description}`;
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.className = 'btn-delete';
-        deleteButton.onclick = () => deleteTestSuite(index);
-        const showMoreButton = document.createElement('button');
-        showMoreButton.textContent = 'Show More';
-        showMoreButton.className = 'btn-primary';
-        showMoreButton.onclick = () => showTestSuiteDetails(suite, index);
-        const buttonContainer = document.createElement('div');
-        buttonContainer.appendChild(deleteButton);
-        buttonContainer.appendChild(showMoreButton);
-        listItem.appendChild(suiteInfo);
-        listItem.appendChild(buttonContainer);
-        listElement.appendChild(listItem);
-    });
+  const listElement = document.getElementById('test-suites-list');
+  listElement.innerHTML = '';
+  testSuites.forEach((suite, index) => {
+      const listItem = document.createElement('li');
+      const suiteInfo = document.createElement('div');
+      suiteInfo.className = 'suite-info';
+      suiteInfo.textContent = `${suite.name}: ${suite.description}`;
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.className = 'btn-delete';
+      deleteButton.onclick = () => deleteTestSuite(index);
+
+      const showMoreButton = document.createElement('button');
+      showMoreButton.textContent = 'Show More';
+      showMoreButton.className = 'btn-primary';
+      showMoreButton.onclick = () => showTestSuiteDetails(suite, index);
+
+      const selectCasesButton = document.createElement('button');
+      selectCasesButton.textContent = 'Select Test Cases';
+      selectCasesButton.className = 'btn-primary';
+      selectCasesButton.onclick = () => selectTestCasesFromSuite(suite);
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.appendChild(deleteButton);
+      buttonContainer.appendChild(showMoreButton);
+      buttonContainer.appendChild(selectCasesButton);
+
+      listItem.appendChild(suiteInfo);
+      listItem.appendChild(buttonContainer);
+      listElement.appendChild(listItem);
+  });
+}
+
+function selectTestCasesFromSuite(suite) {
+  suite.testCases.forEach(caseId => {
+      if (!selectedCases.includes(caseId)) {
+          handleSelectionChange(caseId, true);
+      }
+  });
+  displayTestCases(); // Refresh the display to reflect changes
+}
+
+function handleSelectionChange(caseId, isSelected) {
+  const index = selectedCases.indexOf(caseId);
+  if (isSelected && index === -1) {
+      selectedCases.push(caseId);
+  } else if (!isSelected && index !== -1) {
+      selectedCases.splice(index, 1);
+  }
+  document.getElementById('total-cases-selected').textContent = selectedCases.length.toString();
+  displayTestCases(); // Optionally refresh the display if needed
 }
 
 function showTestSuiteDetails(suite, index) {
