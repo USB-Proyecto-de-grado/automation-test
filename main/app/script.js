@@ -153,11 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //MODAL
 
-document.addEventListener('DOMContentLoaded', function() {
-  // Load existing API/UI folders
-  loadExistingFolders();
-});
-
 // Event listener for test type selection change
 document.getElementById('test-type').addEventListener('change', function(e) {
   const testType = e.target.value;
@@ -678,3 +673,24 @@ function deleteTestSuite(index) {
 document.getElementById('save-changes-button').addEventListener('click', function() {
   saveEditedTestSuite();
 });
+
+function showErrorModal(message) {
+  const modal = document.getElementById('error-modal');
+  const errorMessage = document.getElementById('error-message');
+  errorMessage.textContent = message;
+  modal.style.display = 'block';
+
+  window.onclick = function(event) {
+    if (event.target === modal) {
+      event.preventDefault();  // Prevent the modal from closing
+    }
+  };
+}
+
+
+// Example usage when a misplaced file is detected
+ipcRenderer.on('misplaced-test-file', (event, filePath) => {
+  const message = `There is a test case wrongly located: ${filePath}.  Make sure to follow the infrastructure.`;
+  showErrorModal(message);
+});
+

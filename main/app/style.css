@@ -484,3 +484,37 @@ button {
 button:disabled:hover {
   background-color: #ccc; /* Keep the background color the same as the disabled state */
 }
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  text-align: center; /* Center the text inside the modal */
+}
+
+.warning-sign {
+  color: #f1c40f; /* Gold color for the warning sign */
+}
+
+.modal-header {
+  font-weight: bold;
+  color: #e74c3c; /* Red color for the header for attention */
+}
+
+.error-message {
+  color: #2c3e50; /* Dark blue color for message */
+}

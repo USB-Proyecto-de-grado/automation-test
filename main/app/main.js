@@ -7,8 +7,6 @@ const fs = require('fs');
 const testsDirectory = path.join(__dirname, '../../tests');
 
 let win;
-let uiTestProcess = null;   // Para almacenar el proceso de los tests de UI
-let apiTestProcess = null;  // Para almacenar el proceso de los tests de API
 
 function createWindow() {
   win = new BrowserWindow({
@@ -32,6 +30,7 @@ function createWindow() {
       setupFileWatcher();
   });
 
+  checkTestFilePlacement(win)
 }
 
 function setupFileWatcher() {
@@ -304,3 +303,44 @@ ipcMain.on('clear-api-reports', (event) => {
   });
 });
 
+const allowedDirs = [
+  path.join(__dirname, '../../tests', 'api'),
+  path.join(__dirname, '../../tests', 'ui')
+];
+
+// Function to recursively scan directories
+function scanDirectory(dir, callback) {
+  fs.readdir(dir, { withFileTypes: true }, (err, dirents) => {
+    if (err) {
+      console.error('Failed to read directory:', err);
+      return;
+    }
+    dirents.forEach(dirent => {
+      const res = path.resolve(dir, dirent.name);
+      if (dirent.isDirectory()) {
+        scanDirectory(res, callback);
+      } else {
+        callback(res, dir);
+      }
+    });
+  });
+}
+
+// Function to check file placement
+function checkTestFilePlacement(window) {
+  const testRoot = path.join(__dirname, '../../tests'); // Adjust the path as needed
+  scanDirectory(testRoot, (filePath, dir) => {
+    if (filePath.endsWith('.spec.js')) {
+      const isAllowed = allowedDirs.some(allowedDir => filePath.startsWith(allowedDir) && path.dirname(filePath) !== allowedDir);
+      if (!isAllowed) {
+        console.log('Misplaced test file found:', filePath);
+        window.webContents.send('misplaced-test-file', filePath);
+      }
+    }
+  });
+}
+
+ipcMain.on('check-file-placement', (event) => {
+  const window = event.sender;
+  checkTestFilePlacement(window);
+});
