@@ -3,7 +3,7 @@ const path = require('path');
 const { ipcMain } = require('electron');
 
 // Base directory to watch
-const baseTestDirectory = path.join(__dirname, '../../tests');
+const baseTestDirectory = path.join(__dirname, 'tests');
 
 // Function to extract test scenarios from files
 async function extractTestScenarios(directory) {

@@ -1,27 +1,31 @@
 [
   {
-    "name": "SSADa",
-    "description": "SZXSDCSAD",
+    "name": "Metric test Suite",
+    "description": "Metrics test suite, second specific objective",
     "testCases": [
-      "TC-100",
-      "TC-101",
-      "TC-102",
-      "TC-103"
-    ]
-  },
-  {
-    "name": "TEST2",
-    "description": "TEST",
-    "testCases": [
-      "TC-100",
-      "TC-101"
-    ]
-  },
-  {
-    "name": "sadasd",
-    "description": "asdasdsad",
-    "testCases": [
-      "TC-100"
+      "TC-167",
+      "TC-168",
+      "TC-169",
+      "TC-170",
+      "TC-171",
+      "TC-172",
+      "TC-173",
+      "TC-174",
+      "TC-175",
+      "TC-176",
+      "TC-177",
+      "TC-178",
+      "TC-179",
+      "TC-180",
+      "TC-181",
+      "TC-182",
+      "TC-183",
+      "TC-184",
+      "TC-185",
+      "TC-186",
+      "TC-187",
+      "TC-188",
+      "TC-189"
     ]
   }
 ]

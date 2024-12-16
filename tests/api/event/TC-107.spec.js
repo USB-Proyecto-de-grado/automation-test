@@ -26,6 +26,6 @@ describe('Event API Test - DELETE Requests [Tag: API Testing]', () => {
         // Then: Expect the response to be successful and the data format to be correct
         expect(response.status).to.equal(200);  // The status should be 200 indicating a successful request
         expect(response.body).to.be.an('array');  // The body should be an array, representing the list of events
-        expect(response.body.length).to.be.greater_than(0);  // The array should have at least one item, indicating there's data
+        expect(response.body.length).to.be.greaterThan(0);  // The array should have at least one item, indicating there's data
     });
 });

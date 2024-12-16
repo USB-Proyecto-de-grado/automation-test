@@ -26,8 +26,9 @@ const createMiscPublicationEntries = async (numEntries = 3) => {
             description: `This is the description for Misc Publication ${i}`,
             fileUrl: `http://file.url/test${i}`,
             isPublished: true,
-            publicationDate: '2020-12-05',
-            userId: createdUserId
+            publicationDate: '2024-12-05',
+            userId: createdUserId,
+            currentStatus: "Accepted"
         });
     }
 

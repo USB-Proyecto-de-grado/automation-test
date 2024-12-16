@@ -11,7 +11,7 @@ const createTestUser = async () => {
     const response = await request.post('/user')
                                   .send(user)
                                   .set('Accept', 'application/json');
-    
+    console.log(response)
     if (response.status === 201) {
         createdUserId = response.body.id;
     } else {
@@ -41,11 +41,12 @@ const createEventEntries = async (numEvents = 1) => {
             description: `Description for Test Event ${i + 1}`,
             fileUrl: 'http://drive.url?file=1232332',
             isPublished: true,
-            publicationDate: '2020-12-03',
+            publicationDate: '2024-12-03',
             eventDate: '2020-12-03',
             userId: createdUserId,
             ubicationId: createdUbicationId,
-            cost: 50
+            cost: 50,
+            currentStatus: "Accepted"
         };
         
         const response = await request.post('/event')
@@ -59,6 +60,39 @@ const createEventEntries = async (numEvents = 1) => {
         }
     }
 };
+
+const createEventEntriesByDate = async (numEvents = 1, eventDate = '2024-12-05') => {
+    const eventData = [];
+    for (let i = 1; i <= numEvents; i++) {
+        eventData.push({
+            title: `Test Event ${i}`,
+            description: `Description for Test Event ${i}`,
+            fileUrl: 'http://drive.url?file=1232332',
+            isPublished: true,
+            publicationDate: eventDate, // Use provided or default date
+            eventDate, // Use provided or default date
+            userId: createdUserId,
+            ubicationId: createdUbicationId,
+            cost: 50,
+            currentStatus: "Accepted"
+        });
+    }
+
+    createdEventIds = [];
+
+    for (const event of eventData) {
+        const response = await request.post('/event')
+                                      .send(event)
+                                      .set('Accept', 'application/json');
+        console.log(response)
+        if (response.status === 201) {
+            createdEventIds.push(response.body.id);
+        } else {
+            throw new Error('Error creating event entry');
+        }
+    }
+};
+
 
 const deleteTestUser = async () => {
     if (createdUserId) {
@@ -91,4 +125,4 @@ const addCreatedEventId = (eventId) => {
     createdEventIds.push(eventId);
 };
 
-module.exports = { createTestUser, createTestUbication, createEventEntries, deleteTestUser, deleteTestUbication, deleteEventEntries, getCreatedUserId: () => createdUserId, getCreatedUbicationId: () => createdUbicationId, getCreatedEventIds: () => createdEventIds, addCreatedEventId  };
+module.exports = { createTestUser, createTestUbication, createEventEntries, deleteTestUser, createEventEntriesByDate, deleteTestUbication, deleteEventEntries, getCreatedUserId: () => createdUserId, getCreatedUbicationId: () => createdUbicationId, getCreatedEventIds: () => createdEventIds, addCreatedEventId  };

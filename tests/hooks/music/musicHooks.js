@@ -26,8 +26,9 @@ const createMusicEntries = async (numEntries = 1) => {
             description: `This is the description for Test Music ${i}`,
             youTubeLink: `http://youtube.com/test${i}`,
             isPublished: true,
-            publicationDate: '2020-12-05',
-            userId: createdUserId
+            publicationDate: '2024-12-05',
+            userId: createdUserId,
+            currentStatus: "Accepted"
         });
     }
 
@@ -37,7 +38,6 @@ const createMusicEntries = async (numEntries = 1) => {
         const response = await request.post('/music')
                                       .send(music)
                                       .set('Accept', 'application/json');
-
         if (response.status === 201) {
             createdMusicIds.push(response.body.id);
         } else {
@@ -45,6 +45,36 @@ const createMusicEntries = async (numEntries = 1) => {
         }
     }
 };
+
+
+const createMusicEntriesByDate = async (numEntries = 1, publicationDate = '2024-12-05') => {
+    const musicData = [];
+    for (let i = 1; i <= numEntries; i++) {
+        musicData.push({
+            title: `Test Music ${i}`,
+            description: `This is the description for Test Music ${i}`,
+            youTubeLink: `http://youtube.com/test${i}`,
+            isPublished: true,
+            publicationDate, // Usa la fecha proporcionada o la predeterminada
+            userId: createdUserId,
+            currentStatus: "Accepted"
+        });
+    }
+
+    createdMusicIds = [];
+
+    for (const music of musicData) {
+        const response = await request.post('/music')
+                                      .send(music)
+                                      .set('Accept', 'application/json');
+        if (response.status === 201) {
+            createdMusicIds.push(response.body.id);
+        } else {
+            throw new Error('Error creating music entry');
+        }
+    }
+};
+
 
 const deleteMusicEntries = async () => {
     for (const musicId of createdMusicIds) {
@@ -68,4 +98,4 @@ const addCreatedMusicId = (musicId) => {
     createdMusicIds.push(musicId);
 };
 
-module.exports = { addCreatedMusicId, createTestUser, createMusicEntries, deleteMusicEntries, deleteTestUser, getCreatedMusicIds: () => createdMusicIds, getCreatedUserId: () => createdUserId };
+module.exports = { addCreatedMusicId, createTestUser, createMusicEntries, deleteMusicEntries, deleteTestUser, createMusicEntriesByDate, getCreatedMusicIds: () => createdMusicIds, getCreatedUserId: () => createdUserId };

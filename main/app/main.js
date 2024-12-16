@@ -12,8 +12,6 @@ process.env.BASE_PATH = app.isPackaged
 
 console.log('Base Path:', process.env.BASE_PATH);
 
-const testsDirectory = path.join(__dirname, '../../tests');
-
 let win;
 
 function createWindow() {
@@ -41,6 +39,11 @@ function createWindow() {
   checkTestFilePlacement(win)
 }
 
+const testsDirectory = app.isPackaged
+    ? path.join(process.resourcesPath, '../../../tests') // Ajusta esta ruta para la versión empaquetada
+    : path.join(__dirname, '../../../tests'); // Ajusta esta ruta para la versión no empaquetada
+
+
 function setupFileWatcher() {
   const watcher = chokidar.watch(testsDirectory, { persistent: true });
   watcher.on('add', updateTestCases)
@@ -51,6 +54,9 @@ function setupFileWatcher() {
 function updateTestCases() {
   extractTestScenarios(testsDirectory).then(scenarios => {
       // Check if the window and its webContents are still available
+      scenarios.forEach(scenario => {
+        win.webContents.send('log', `ID: ${scenario.id}, File: ${scenario.file}, Scenario: ${scenario.scenario}, Tags: ${scenario.tags.join(", ")}, Path: ${testsDirectory}`);
+      });
       if (win && win.webContents) {
           win.webContents.send('test-cases-updated', scenarios);
       }
@@ -67,20 +73,6 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-
-function openReportWindow(reportPath) {
-  let reportWin = new BrowserWindow({
-      width: 800,
-      height: 600,
-      webPreferences: {
-          nodeIntegration: false,
-          contextIsolation: true
-      }
-  });
-  reportWin.loadURL(`file://${reportPath}`);
-  reportWin.on('closed', () => reportWin = null);
-};
 
 
 // Handle creating a new test case
@@ -210,7 +202,7 @@ ipcMain.on('run-custom-tests', (event, customCommand) => {
 
 
 ipcMain.on('generate-report-ids', async (event) => {
-  const command = "allure generate reports/ids/allure-results --clean -o reports/ids/allure-report && allure open reports/ids/allure-report";
+  const command = "allure generate ../../reports/ids/allure-results --clean -o ../../reports/ids/allure-report && allure open ../../reports/ids/allure-report";
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error generating report for selected IDs: ${error.message}`);

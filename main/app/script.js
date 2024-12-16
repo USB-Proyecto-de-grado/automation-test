@@ -313,6 +313,10 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
+  if (event.target.classList.contains('modal')) {
+    closeModal(event.target);
+    event.stopPropagation(); // Prevent further propagation of the click event
+}
 }
 
 
@@ -450,23 +454,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function attachEventListeners() {
-    document.getElementById('search-test-case').addEventListener('input', searchTestCasesForSuite);
-    document.querySelectorAll('.close').forEach(closeButton => {
-        closeButton.onclick = function() {
-            closeModal(closeButton.closest('.modal'));
-        }
-    });
-    document.getElementById('add-test-suite').addEventListener('click', clearAndShowAddSuiteModal);
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            closeModal(event.target);
-        }
-    };
-    document.getElementById('test-suite-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        addNewSuite();
-    });
+  document.getElementById('search-test-case').addEventListener('input', searchTestCasesForSuite);
+  document.querySelectorAll('.close').forEach(closeButton => {
+      closeButton.onclick = function() {
+          closeModal(closeButton.closest('.modal'));
+      };
+  });
+  document.getElementById('add-test-suite').addEventListener('click', clearAndShowAddSuiteModal);
+  window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+          closeModal(event.target);
+      }
+  };
+  document.getElementById('test-suite-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      addNewSuite();
+  });
 }
+
 
 function loadTestCases() {
     const listElement = document.getElementById('test-case-selection-list');
@@ -514,6 +519,8 @@ function closeModal(modal) {
     modal.style.display = 'none';
     document.getElementById('suite-name').value = '';
     document.getElementById('suite-description').value = '';
+    document.getElementById('search-test-case').disabled = false; // Enable the search bar if disabled
+    document.getElementById('search-test-case').focus();
     selectedCasesForSuite = {};
     loadTestCases();
 }
